@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 
 from backend.core.config.settings import settings
 from backend.core.database import create_tables, engine
-from backend.api.routes import chat, documents
+from backend.api.routes import chat, documents, feedback, analytics
 import backend.domain.models  # noqa: F401 — enregistre les modèles auprès de Base
 
 
@@ -39,6 +39,8 @@ app.add_middleware(
 
 app.include_router(chat.router, prefix=settings.API_PREFIX)
 app.include_router(documents.router, prefix=settings.API_PREFIX)
+app.include_router(feedback.router, prefix=settings.API_PREFIX)
+app.include_router(analytics.router, prefix=settings.API_PREFIX)
 
 
 @app.get("/health")

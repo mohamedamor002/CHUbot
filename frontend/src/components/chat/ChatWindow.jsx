@@ -7,10 +7,15 @@ export default function ChatWindow({ sessionId, onSessionChange }) {
   const [messages, setMessages] = useState([])
   const [loading, setLoading] = useState(false)
   const bottomRef = useRef(null)
+  const skipNextLoad = useRef(false) // évite d'écraser les messages en cours après création
 
-  // Charger l'historique si on reprend une session existante
+  // Charger l'historique uniquement si on reprend une session existante (pas une nouvelle)
   useEffect(() => {
     if (!sessionId) return
+    if (skipNextLoad.current) {
+      skipNextLoad.current = false
+      return
+    }
     getSession(sessionId).then((data) => {
       setMessages(data.messages.map((m) => ({ role: m.role, content: m.content })))
     }).catch(() => {})
@@ -23,9 +28,7 @@ export default function ChatWindow({ sessionId, onSessionChange }) {
   async function handleSend(question) {
     setMessages((prev) => [...prev, { role: 'human', content: question }])
     setLoading(true)
-
-    // Add empty assistant message for streaming
-    setMessages((prev) => [...prev, { role: 'assistant', content: '', streaming: true }])
+    setMessages((prev) => [...prev, { role: 'assistant', content: '', streaming: true, searching: true }])
 
     try {
       await sendMessageStream(
@@ -35,12 +38,13 @@ export default function ChatWindow({ sessionId, onSessionChange }) {
           setMessages((prev) => {
             const updated = [...prev]
             const last = updated[updated.length - 1]
-            updated[updated.length - 1] = { ...last, content: last.content + chunk }
+            updated[updated.length - 1] = { ...last, content: last.content + chunk, searching: false }
             return updated
           })
         },
-        (newSessionId, sources) => {
+        (newSessionId, sources, messageId) => {
           if (newSessionId && !sessionId) {
+            skipNextLoad.current = true  // session créée maintenant — ne pas recharger
             onSessionChange(newSessionId)
           }
           setMessages((prev) => {
@@ -49,6 +53,7 @@ export default function ChatWindow({ sessionId, onSessionChange }) {
               ...updated[updated.length - 1],
               streaming: false,
               sources: sources || [],
+              messageId,
             }
             return updated
           })
@@ -118,7 +123,9 @@ export default function ChatWindow({ sessionId, onSessionChange }) {
             role={msg.role}
             content={msg.content}
             isStreaming={msg.streaming}
+            isSearching={msg.searching}
             sources={msg.sources || []}
+            messageId={msg.messageId}
           />
         ))}
         <div ref={bottomRef} />

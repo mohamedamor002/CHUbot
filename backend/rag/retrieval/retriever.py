@@ -24,14 +24,18 @@ def _format_docs(docs: List[Document]) -> str:
     return "\n\n---\n\n".join(doc.page_content for doc in docs)
 
 
-def _extract_sources(docs: List[Document]) -> List[str]:
+def _extract_sources(docs: List[Document]) -> List[dict]:
     seen = set()
     sources = []
     for doc in docs:
         name = doc.metadata.get("source_file")
         if name and name not in seen:
             seen.add(name)
-            sources.append(name)
+            sources.append({
+                "name": name,
+                "url": doc.metadata.get("source_url"),        # None pour les PDFs
+                "type": doc.metadata.get("file_type", "pdf"), # "web" ou "pdf"
+            })
     return sources
 
 
@@ -63,10 +67,11 @@ def get_retriever():
     )
 
 
-async def retrieve(question: str) -> Tuple[str, List[str]]:
-    """Retourne (context formaté, liste des fichiers sources)."""
+async def retrieve(question: str) -> Tuple[str, List[dict], bool]:
+    """Retourne (context formaté, sources, is_covered)."""
     docs = await get_retriever().ainvoke(question)
-    return _format_docs(docs), _extract_sources(docs)
+    is_covered = len(docs) > 0
+    return _format_docs(docs), _extract_sources(docs), is_covered
 
 
 async def stream_answer(context: str, question: str):
@@ -77,6 +82,6 @@ async def stream_answer(context: str, question: str):
 
 
 async def ask(question: str) -> str:
-    context, _ = await retrieve(question)
+    context, _, __ = await retrieve(question)
     chain = _get_generation_chain()
     return await chain.ainvoke({"context": context, "question": question})

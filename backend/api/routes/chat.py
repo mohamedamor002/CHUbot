@@ -1,5 +1,7 @@
 import json
+import time
 import uuid
+import re
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
@@ -8,8 +10,21 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from backend.core.database import get_db
 from backend.domain.models.message import Message
 from backend.domain.models.session import ConversationSession
+from backend.domain.models.feedback import MessageMetrics
 from backend.domain.schemas.chat import ChatRequest, ChatResponse, SessionResponse, SessionSummary
 from backend.rag.retrieval.retriever import ask, retrieve, stream_answer
+
+_ESCALATION_PATTERN = re.compile(
+    r"contacter|contacter le (service|pôle|bureau)|DRH|drh-|"
+    r"ressources humaines|pole (politique|social)|@chu-angers",
+    re.IGNORECASE,
+)
+_NOT_COVERED_PATTERN = re.compile(
+    r"n['']est pas dans les documents|pas d['']information|"
+    r"aucune information|je ne (trouve|peux|dispose|sais) pas|"
+    r"non disponible|n['']ai pas trouvé",
+    re.IGNORECASE,
+)
 
 router = APIRouter(prefix="/chat", tags=["Chat"])
 
@@ -51,15 +66,16 @@ async def chat(request: ChatRequest, db: AsyncSession = Depends(get_db)):
 
 @router.post("/stream")
 async def chat_stream(request: ChatRequest, db: AsyncSession = Depends(get_db)):
-    """Pose une question — retourne la réponse en streaming avec les sources dans les headers."""
+    """Pose une question — streaming avec tracking des métriques."""
     conv_session = await _get_or_create_session(request.session_id, db)
     db.add(Message(session_id=conv_session.id, role="human", content=request.question))
     await db.flush()
 
     session_id = conv_session.id
+    assistant_msg_id = uuid.uuid4()
 
-    # Retrieval avant le streaming pour connaître les sources
-    context, sources = await retrieve(request.question)
+    t_start = time.monotonic()
+    context, sources, is_covered = await retrieve(request.question)
     collected_tokens: list[str] = []
 
     async def token_generator():
@@ -67,17 +83,32 @@ async def chat_stream(request: ChatRequest, db: AsyncSession = Depends(get_db)):
             collected_tokens.append(chunk)
             yield chunk
 
-        full_answer = "".join(collected_tokens)
-        async with db.begin_nested():
-            db.add(Message(session_id=session_id, role="assistant", content=full_answer))
+        # Sauvegarde après streaming — dans try/except pour ne jamais bloquer le stream
+        try:
+            elapsed_ms = int((time.monotonic() - t_start) * 1000)
+            full_answer = "".join(collected_tokens)
+            has_escalation = bool(_ESCALATION_PATTERN.search(full_answer))
+            covered = is_covered and not bool(_NOT_COVERED_PATTERN.search(full_answer))
+
+            async with db.begin_nested():
+                db.add(Message(id=assistant_msg_id, session_id=session_id, role="assistant", content=full_answer))
+                db.add(MessageMetrics(
+                    message_id=assistant_msg_id,
+                    response_time_ms=elapsed_ms,
+                    is_covered=covered,
+                    has_escalation=has_escalation,
+                ))
+        except Exception as e:
+            print(f"[WARN] Erreur sauvegarde message assistant : {e}")
 
     return StreamingResponse(
         token_generator(),
         media_type="text/plain",
         headers={
             "X-Session-ID": str(session_id),
+            "X-Message-ID": str(assistant_msg_id),
             "X-Sources": json.dumps(sources),
-            "Access-Control-Expose-Headers": "X-Session-ID, X-Sources",
+            "Access-Control-Expose-Headers": "X-Session-ID, X-Message-ID, X-Sources",
         },
     )
 

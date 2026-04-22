@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import DocumentPanel from '../documents/DocumentPanel.jsx'
+import AnalyticsPanel from '../analytics/AnalyticsPanel.jsx'
 import { listSessions } from '../../api/client.js'
 
 export default function Sidebar({ sessionId, onNewChat, onSelectSession }) {
@@ -27,22 +28,17 @@ export default function Sidebar({ sessionId, onNewChat, onSelectSession }) {
 
       {/* Tabs */}
       <div className="flex border-b border-white/10">
-        <button
-          onClick={() => setTab('chat')}
-          className={`flex-1 py-3 text-xs font-medium transition-colors ${
-            tab === 'chat' ? 'bg-white/10 text-white' : 'text-blue-200 hover:text-white hover:bg-white/5'
-          }`}
-        >
-          Conversation
-        </button>
-        <button
-          onClick={() => setTab('docs')}
-          className={`flex-1 py-3 text-xs font-medium transition-colors ${
-            tab === 'docs' ? 'bg-white/10 text-white' : 'text-blue-200 hover:text-white hover:bg-white/5'
-          }`}
-        >
-          Documents
-        </button>
+        {['chat', 'docs', 'stats'].map((t) => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            className={`flex-1 py-3 text-xs font-medium transition-colors ${
+              tab === t ? 'bg-white/10 text-white' : 'text-blue-200 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            {t === 'chat' ? 'Chat' : t === 'docs' ? 'Docs' : 'Stats'}
+          </button>
+        ))}
       </div>
 
       {/* Content */}
@@ -81,8 +77,10 @@ export default function Sidebar({ sessionId, onNewChat, onSelectSession }) {
               </div>
             )}
           </div>
-        ) : (
+        ) : tab === 'docs' ? (
           <DocumentPanel />
+        ) : (
+          <AnalyticsPanel />
         )}
       </div>
 
