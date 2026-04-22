@@ -27,7 +27,11 @@ CHUbot/
 │       │   ├── sidebar/      # Navigation, nouvelle conversation
 │       │   └── documents/    # Upload et liste des documents
 │       └── App.jsx
-├── data/indexes/             # Données ChromaDB (vector store local)
+├── scripts/                  # Scripts utilitaires
+│   └── ingest_documents.py   # Ingestion batch de documents RH
+├── data/
+│   ├── documents/            # Fichiers sources PDF/Excel (non versionné)
+│   └── indexes/              # Données ChromaDB (non versionné)
 ├── alembic/                  # Migrations de base de données
 ├── .env                      # Variables d'environnement (non versionné)
 └── requirements.txt
@@ -89,7 +93,8 @@ Modifier `.env` avec vos valeurs :
 
 ```env
 DATABASE_URL=postgresql+asyncpg://postgres:VOTRE_MOT_DE_PASSE@localhost:5432/chubot
-OLLAMA_MODEL=qwen2.5:3b          # ou qwen2.5:9b pour plus de précision
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_MODEL=qwen3.5:latest
 JWT_SECRET_KEY=votre-cle-secrete-256-bits
 ```
 
@@ -105,7 +110,7 @@ Les tables sont créées automatiquement au démarrage du serveur.
 ### 5. Télécharger les modèles Ollama
 
 ```bash
-ollama pull qwen2.5:3b        # LLM (rapide) ou qwen2.5:9b (plus précis)
+ollama pull qwen3.5:latest    # LLM (configurable via OLLAMA_MODEL dans .env)
 ollama pull nomic-embed-text  # Embeddings
 ```
 
@@ -170,7 +175,7 @@ Paramètres ajustables dans `.env` :
 
 | Variable | Défaut | Description |
 |----------|--------|-------------|
-| `OLLAMA_MODEL` | `qwen2.5:3b` | Modèle LLM (plus grand = plus précis mais plus lent) |
+| `OLLAMA_MODEL` | `qwen3.5:latest` | Modèle LLM (plus grand = plus précis mais plus lent) |
 | `EMBEDDING_MODEL` | `nomic-embed-text` | Modèle d'embeddings |
 | `CHUNK_SIZE` | `512` | Taille des chunks de documents (en tokens) |
 | `CHUNK_OVERLAP` | `64` | Chevauchement entre chunks |
@@ -184,9 +189,23 @@ Paramètres ajustables dans `.env` :
 |--------|-----------|
 | PDF | `.pdf` |
 | Word | `.docx`, `.doc` |
-| Excel | `.xlsx`, `.xls` |
+| Excel | `.xlsx`, `.xls`, `.xlsm` |
 
-Taille maximale : **20 Mo** par fichier.
+Taille maximale : **20 Mo** par fichier (upload via API).
+
+---
+
+## Ingestion batch de documents
+
+Pour indexer plusieurs documents d'un coup sans passer par l'interface :
+
+```bash
+# Placer les fichiers dans data/documents/, puis :
+python scripts/ingest_documents.py --dir data/documents
+
+# Ou un seul fichier :
+python scripts/ingest_documents.py --file chemin/vers/fichier.pdf
+```
 
 ---
 

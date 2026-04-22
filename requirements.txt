@@ -10,7 +10,7 @@ pydantic-settings>=2.7.0
 # ── LLM & RAG Orchestration ───────────────────────────────────────────────────
 langchain>=0.3.0
 langchain-community>=0.3.0
-langchain-ollama>=0.2.0           # intégration Ollama (modèles locaux)
+langchain-ollama>=1.1.0           # intégration Ollama (modèles locaux)
 langchain-chroma>=0.1.0           # intégration ChromaDB pour LangChain
 langchain-text-splitters>=0.3.0   # découpage de documents
 
@@ -21,7 +21,8 @@ chromadb>=0.6.0                   # local vector DB
 pymupdf>=1.24.0                   # PDF (fiche de poste, contrats, règlements…)
 python-docx>=1.1.0                # Word documents
 docx2txt>=0.8                     # requis par Docx2txtLoader de LangChain
-openpyxl>=3.1.0                   # Excel (tableaux RH, plannings)
+openpyxl>=3.1.0                   # Excel .xlsx et .xlsm (tableaux RH, plannings)
+xlrd>=2.0.0                       # Excel .xls (ancien format)
 unstructured[xlsx]>=0.10.0        # requis par UnstructuredExcelLoader
 
 # ── Database ──────────────────────────────────────────────────────────────────
@@ -48,4 +49,3 @@ asyncpg>=0.30.0                   # PostgreSQL async driver
 # celery[redis]>=5.4.0
 # faiss-cpu>=1.12.0
 # unstructured[local-inference]>=0.16.0
-pymupdf
