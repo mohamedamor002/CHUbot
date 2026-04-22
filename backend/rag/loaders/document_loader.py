@@ -6,7 +6,7 @@ from langchain_community.document_loaders import PyMuPDFLoader, Docx2txtLoader
 from langchain_community.document_loaders import UnstructuredExcelLoader
 
 
-SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".doc", ".xlsx", ".xls"}
+SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".doc", ".xlsx", ".xls", ".xlsm"}
 
 
 def load_document(file_path: str) -> List[Document]:
@@ -27,7 +27,7 @@ def load_document(file_path: str) -> List[Document]:
     elif ext in {".docx", ".doc"}:
         loader = Docx2txtLoader(str(path))
 
-    elif ext in {".xlsx", ".xls"}:
+    elif ext in {".xlsx", ".xls", ".xlsm"}:
         loader = UnstructuredExcelLoader(str(path), mode="elements")
 
     docs = loader.load()

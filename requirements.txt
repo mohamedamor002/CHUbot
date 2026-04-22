@@ -48,3 +48,4 @@ asyncpg>=0.30.0                   # PostgreSQL async driver
 # celery[redis]>=5.4.0
 # faiss-cpu>=1.12.0
 # unstructured[local-inference]>=0.16.0
+pymupdf
