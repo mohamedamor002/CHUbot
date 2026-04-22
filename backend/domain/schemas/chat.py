@@ -25,3 +25,10 @@ class SessionResponse(BaseModel):
     session_id: uuid.UUID
     messages: list[MessageOut]
     created_at: datetime
+
+
+class SessionSummary(BaseModel):
+    session_id: uuid.UUID
+    title: str | None
+    created_at: datetime
+    last_message: str | None

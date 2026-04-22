@@ -1,12 +1,20 @@
 import { useEffect, useRef, useState } from 'react'
 import MessageBubble from './MessageBubble.jsx'
 import ChatInput from './ChatInput.jsx'
-import { sendMessageStream } from '../../api/client.js'
+import { sendMessageStream, getSession } from '../../api/client.js'
 
 export default function ChatWindow({ sessionId, onSessionChange }) {
   const [messages, setMessages] = useState([])
   const [loading, setLoading] = useState(false)
   const bottomRef = useRef(null)
+
+  // Charger l'historique si on reprend une session existante
+  useEffect(() => {
+    if (!sessionId) return
+    getSession(sessionId).then((data) => {
+      setMessages(data.messages.map((m) => ({ role: m.role, content: m.content })))
+    }).catch(() => {})
+  }, [sessionId])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })

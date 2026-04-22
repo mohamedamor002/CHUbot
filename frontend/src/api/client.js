@@ -17,6 +17,11 @@ export async function getSession(sessionId) {
   return data // { session_id, messages, created_at }
 }
 
+export async function listSessions() {
+  const { data } = await api.get('/chat/sessions')
+  return data // [{ session_id, title, created_at, last_message }]
+}
+
 // ── Streaming ─────────────────────────────────────────────────────────────────
 
 export async function sendMessageStream(question, sessionId = null, onChunk, onDone) {

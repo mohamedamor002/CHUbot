@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from backend.core.database import get_db
 from backend.domain.models.message import Message
 from backend.domain.models.session import ConversationSession
-from backend.domain.schemas.chat import ChatRequest, ChatResponse, SessionResponse
+from backend.domain.schemas.chat import ChatRequest, ChatResponse, SessionResponse, SessionSummary
 from backend.rag.retrieval.retriever import ask, retrieve, stream_answer
 
 router = APIRouter(prefix="/chat", tags=["Chat"])
@@ -80,6 +80,33 @@ async def chat_stream(request: ChatRequest, db: AsyncSession = Depends(get_db)):
             "Access-Control-Expose-Headers": "X-Session-ID, X-Sources",
         },
     )
+
+
+@router.get("/sessions", response_model=list[SessionSummary])
+async def list_sessions(db: AsyncSession = Depends(get_db)):
+    """Liste toutes les sessions avec leur premier message comme titre."""
+    from sqlalchemy import select
+    from sqlalchemy.orm import selectinload
+
+    result = await db.execute(
+        select(ConversationSession)
+        .options(selectinload(ConversationSession.messages))
+        .order_by(ConversationSession.created_at.desc())
+        .limit(50)
+    )
+    sessions = result.scalars().all()
+
+    summaries = []
+    for s in sessions:
+        first_human = next((m.content for m in s.messages if m.role == "human"), None)
+        last_human = next((m.content for m in reversed(s.messages) if m.role == "human"), None)
+        summaries.append(SessionSummary(
+            session_id=s.id,
+            title=s.title or (first_human[:60] if first_human else "Conversation"),
+            created_at=s.created_at,
+            last_message=last_human,
+        ))
+    return summaries
 
 
 @router.get("/sessions/{session_id}", response_model=SessionResponse)

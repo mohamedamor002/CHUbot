@@ -1,8 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import DocumentPanel from '../documents/DocumentPanel.jsx'
+import { listSessions } from '../../api/client.js'
 
-export default function Sidebar({ sessionId, onNewChat }) {
-  const [tab, setTab] = useState('chat') // 'chat' | 'docs'
+export default function Sidebar({ sessionId, onNewChat, onSelectSession }) {
+  const [tab, setTab] = useState('chat')
+  const [sessions, setSessions] = useState([])
+
+  useEffect(() => {
+    listSessions().then(setSessions).catch(() => {})
+  }, [sessionId]) // recharger à chaque changement de session
 
   return (
     <aside className="w-72 bg-brand-900 text-white flex flex-col h-full shrink-0">
@@ -50,11 +56,27 @@ export default function Sidebar({ sessionId, onNewChat }) {
               <span className="text-lg leading-none">+</span>
               Nouvelle conversation
             </button>
-            {sessionId && (
+
+            {sessions.length > 0 && (
               <div className="mt-4">
-                <p className="text-xs text-blue-300 uppercase tracking-wider mb-2 px-1">Session active</p>
-                <div className="px-3 py-2 rounded-lg bg-white/10 text-xs text-blue-100 break-all">
-                  {sessionId}
+                <p className="text-xs text-blue-300 uppercase tracking-wider mb-2 px-1">
+                  Récentes
+                </p>
+                <div className="space-y-1">
+                  {sessions.map((s) => (
+                    <button
+                      key={s.session_id}
+                      onClick={() => onSelectSession(s.session_id)}
+                      className={`w-full text-left px-3 py-2 rounded-lg text-xs transition-colors truncate ${
+                        s.session_id === sessionId
+                          ? 'bg-white/20 text-white'
+                          : 'text-blue-100 hover:bg-white/10 hover:text-white'
+                      }`}
+                      title={s.title}
+                    >
+                      {s.title || 'Conversation'}
+                    </button>
+                  ))}
                 </div>
               </div>
             )}
