@@ -3,6 +3,7 @@ import tempfile
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.core.database import get_db
@@ -71,3 +72,37 @@ async def list_documents(db: AsyncSession = Depends(get_db)):
         IndexResponse(filename=d.filename, chunks_indexed=d.chunks_indexed)
         for d in docs
     ]
+
+
+DOCUMENTS_DIR = Path("data/documents")
+
+
+MIME_TYPES = {
+    ".pdf":  "application/pdf",
+    ".xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    ".xlsm": "application/vnd.ms-excel.sheet.macroEnabled.12",
+    ".xls":  "application/vnd.ms-excel",
+    ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ".doc":  "application/msword",
+}
+
+
+@router.get("/file/{filename}")
+async def serve_document(filename: str):
+    """Sert un fichier source depuis data/documents/ (inline pour visualisation navigateur)."""
+    safe_path = (DOCUMENTS_DIR / filename).resolve()
+    if not str(safe_path).startswith(str(DOCUMENTS_DIR.resolve())):
+        raise HTTPException(status_code=400, detail="Chemin invalide")
+
+    if not safe_path.exists():
+        raise HTTPException(status_code=404, detail="Fichier introuvable")
+
+    ext = safe_path.suffix.lower()
+    media_type = MIME_TYPES.get(ext, "application/octet-stream")
+
+    return FileResponse(
+        path=str(safe_path),
+        filename=filename,
+        media_type=media_type,
+        headers={"Content-Disposition": f"inline; filename=\"{filename}\""},
+    )

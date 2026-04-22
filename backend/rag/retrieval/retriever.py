@@ -1,9 +1,10 @@
 from functools import lru_cache
+from typing import List, Tuple
 
 from langchain_ollama import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import RunnablePassthrough
+from langchain_core.documents import Document
 
 from backend.core.config.settings import settings
 from backend.rag.indexer.vector_store import get_vector_store
@@ -19,42 +20,63 @@ Contexte extrait des documents RH :
 """
 
 
-def _format_docs(docs) -> str:
+def _format_docs(docs: List[Document]) -> str:
     return "\n\n---\n\n".join(doc.page_content for doc in docs)
 
 
+def _extract_sources(docs: List[Document]) -> List[str]:
+    seen = set()
+    sources = []
+    for doc in docs:
+        name = doc.metadata.get("source_file")
+        if name and name not in seen:
+            seen.add(name)
+            sources.append(name)
+    return sources
+
+
 @lru_cache(maxsize=1)
-def get_rag_chain():
-    """Construit et retourne la chaîne RAG complète."""
-    llm = ChatOllama(
+def _get_llm():
+    return ChatOllama(
         model=settings.OLLAMA_MODEL,
         base_url=settings.OLLAMA_BASE_URL,
         temperature=0.1,
         num_ctx=2048,
         num_predict=512,
-        reasoning=False,   # disable extended thinking for qwen3/qwen3.5 models
+        reasoning=False,
     )
 
-    retriever = get_vector_store().as_retriever(
-        search_kwargs={"k": settings.RETRIEVAL_TOP_K}
-    )
 
+@lru_cache(maxsize=1)
+def _get_generation_chain():
+    """Chaîne prompt → LLM → parser (sans retriever)."""
     prompt = ChatPromptTemplate.from_messages([
         ("system", SYSTEM_PROMPT),
         ("human", "{question}"),
     ])
+    return prompt | _get_llm() | StrOutputParser()
 
-    chain = (
-        {"context": retriever | _format_docs, "question": RunnablePassthrough()}
-        | prompt
-        | llm
-        | StrOutputParser()
+
+def get_retriever():
+    return get_vector_store().as_retriever(
+        search_kwargs={"k": settings.RETRIEVAL_TOP_K}
     )
 
-    return chain
+
+async def retrieve(question: str) -> Tuple[str, List[str]]:
+    """Retourne (context formaté, liste des fichiers sources)."""
+    docs = await get_retriever().ainvoke(question)
+    return _format_docs(docs), _extract_sources(docs)
+
+
+async def stream_answer(context: str, question: str):
+    """Générateur async de tokens LLM."""
+    chain = _get_generation_chain()
+    async for chunk in chain.astream({"context": context, "question": question}):
+        yield chunk
 
 
 async def ask(question: str) -> str:
-    """Pose une question et retourne la réponse générée par Ollama."""
-    chain = get_rag_chain()
-    return await chain.ainvoke(question)
+    context, _ = await retrieve(question)
+    chain = _get_generation_chain()
+    return await chain.ainvoke({"context": context, "question": question})

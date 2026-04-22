@@ -1,3 +1,4 @@
+import json
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -8,7 +9,7 @@ from backend.core.database import get_db
 from backend.domain.models.message import Message
 from backend.domain.models.session import ConversationSession
 from backend.domain.schemas.chat import ChatRequest, ChatResponse, SessionResponse
-from backend.rag.retrieval.retriever import ask, get_rag_chain
+from backend.rag.retrieval.retriever import ask, retrieve, stream_answer
 
 router = APIRouter(prefix="/chat", tags=["Chat"])
 
@@ -50,17 +51,19 @@ async def chat(request: ChatRequest, db: AsyncSession = Depends(get_db)):
 
 @router.post("/stream")
 async def chat_stream(request: ChatRequest, db: AsyncSession = Depends(get_db)):
-    """Pose une question — retourne la réponse en streaming token par token."""
+    """Pose une question — retourne la réponse en streaming avec les sources dans les headers."""
     conv_session = await _get_or_create_session(request.session_id, db)
     db.add(Message(session_id=conv_session.id, role="human", content=request.question))
     await db.flush()
 
     session_id = conv_session.id
-    llm_chain = get_rag_chain()
+
+    # Retrieval avant le streaming pour connaître les sources
+    context, sources = await retrieve(request.question)
     collected_tokens: list[str] = []
 
     async def token_generator():
-        async for chunk in llm_chain.astream(request.question):
+        async for chunk in stream_answer(context, request.question):
             collected_tokens.append(chunk)
             yield chunk
 
@@ -71,7 +74,11 @@ async def chat_stream(request: ChatRequest, db: AsyncSession = Depends(get_db)):
     return StreamingResponse(
         token_generator(),
         media_type="text/plain",
-        headers={"X-Session-ID": str(session_id)},
+        headers={
+            "X-Session-ID": str(session_id),
+            "X-Sources": json.dumps(sources),
+            "Access-Control-Expose-Headers": "X-Session-ID, X-Sources",
+        },
     )
 
 

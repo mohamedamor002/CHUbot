@@ -31,13 +31,17 @@ export default function ChatWindow({ sessionId, onSessionChange }) {
             return updated
           })
         },
-        (newSessionId) => {
+        (newSessionId, sources) => {
           if (newSessionId && !sessionId) {
             onSessionChange(newSessionId)
           }
           setMessages((prev) => {
             const updated = [...prev]
-            updated[updated.length - 1] = { ...updated[updated.length - 1], streaming: false }
+            updated[updated.length - 1] = {
+              ...updated[updated.length - 1],
+              streaming: false,
+              sources: sources || [],
+            }
             return updated
           })
         }
@@ -106,6 +110,7 @@ export default function ChatWindow({ sessionId, onSessionChange }) {
             role={msg.role}
             content={msg.content}
             isStreaming={msg.streaming}
+            sources={msg.sources || []}
           />
         ))}
         <div ref={bottomRef} />

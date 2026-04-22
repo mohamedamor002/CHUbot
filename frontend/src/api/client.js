@@ -27,6 +27,9 @@ export async function sendMessageStream(question, sessionId = null, onChunk, onD
   })
 
   const newSessionId = response.headers.get('X-Session-ID')
+  const rawSources = response.headers.get('X-Sources')
+  const sources = rawSources ? JSON.parse(rawSources) : []
+
   const reader = response.body.getReader()
   const decoder = new TextDecoder()
 
@@ -36,7 +39,7 @@ export async function sendMessageStream(question, sessionId = null, onChunk, onD
     onChunk(decoder.decode(value, { stream: true }))
   }
 
-  onDone(newSessionId)
+  onDone(newSessionId, sources)
 }
 
 // ── Documents ─────────────────────────────────────────────────────────────────

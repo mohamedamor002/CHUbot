@@ -1,6 +1,6 @@
 import ReactMarkdown from 'react-markdown'
 
-export default function MessageBubble({ role, content, isStreaming = false }) {
+export default function MessageBubble({ role, content, isStreaming = false, sources = [] }) {
   const isUser = role === 'human' || role === 'user'
 
   return (
@@ -38,6 +38,27 @@ export default function MessageBubble({ role, content, isStreaming = false }) {
         )}
         {isStreaming && (
           <span className="inline-block w-2 h-4 bg-slate-400 ml-1 animate-pulse rounded-sm" />
+        )}
+        {!isStreaming && !isUser && sources.length > 0 && (
+          <div className="mt-3 pt-3 border-t border-slate-100">
+            <p className="text-xs text-slate-400 mb-1">Sources :</p>
+            <div className="flex flex-col gap-1">
+              {sources.map((filename) => (
+                <a
+                  key={filename}
+                  href={`/api/v1/documents/file/${encodeURIComponent(filename)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 hover:underline"
+                >
+                  <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                  </svg>
+                  {filename}
+                </a>
+              ))}
+            </div>
+          </div>
         )}
       </div>
     </div>
