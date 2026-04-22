@@ -106,9 +106,44 @@ export default function MessageBubble({ role, content, isStreaming = false, isSe
               ol: ({ children }) => <ol className="list-decimal pl-4 mb-2 space-y-1">{children}</ol>,
               li: ({ children }) => <li>{children}</li>,
               strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
-              a: ({ href, children }) => (
-                <a href={href} target="_blank" rel="noreferrer" className="underline">{children}</a>
-              ),
+              a: ({ href, children }) => {
+                const isExternal = href?.startsWith('http://') || href?.startsWith('https://')
+                const isDoc = href && /\.(docx?|pdf|xlsx?|xlsm)$/i.test(href)
+
+                if (isDoc && isExternal) {
+                  // Lien externe vers un document → ouvrir directement
+                  return (
+                    <a href={href} target="_blank" rel="noreferrer"
+                      className="underline text-blue-600 hover:text-blue-800">
+                      {children}
+                    </a>
+                  )
+                }
+
+                if (isDoc) {
+                  // Lien vers un fichier local (nom de fichier seul ou chemin relatif)
+                  const filename = href.split('/').pop()
+                  return (
+                    <a href={`/api/v1/documents/file/${encodeURIComponent(filename)}`}
+                      target="_blank" rel="noreferrer"
+                      className="underline text-blue-600 hover:text-blue-800">
+                      {children}
+                    </a>
+                  )
+                }
+
+                if (isExternal) {
+                  return (
+                    <a href={href} target="_blank" rel="noreferrer"
+                      className="underline text-blue-600 hover:text-blue-800">
+                      {children}
+                    </a>
+                  )
+                }
+
+                // Lien sans URL valide → texte simple (pas de navigation)
+                return <span className="text-blue-600 underline cursor-default">{children}</span>
+              },
             }}
           >
             {content}

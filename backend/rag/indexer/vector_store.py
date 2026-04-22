@@ -34,7 +34,7 @@ def index_documents(docs: List[Document]) -> int:
     vector_store = get_vector_store()
     vector_store.add_documents(chunks)
 
-    print(f"  ✓ {len(chunks)} chunks indexés dans ChromaDB")
+    print(f"  [OK] {len(chunks)} chunks indexes dans ChromaDB")
     return len(chunks)
 
 
@@ -43,4 +43,4 @@ def delete_collection() -> None:
     store = get_vector_store()
     store.delete_collection()
     get_vector_store.cache_clear()
-    print("  ✓ Collection ChromaDB supprimée")
+    print("  [OK] Collection ChromaDB supprimee")

@@ -6,6 +6,7 @@ Web scraper pour le site CHU Angers.
 """
 
 import time
+from pathlib import Path
 from typing import List
 from urllib.parse import urljoin, urlparse
 
@@ -166,3 +167,53 @@ def load_urls(urls: List[str], use_js: bool = False) -> List[Document]:
         except Exception as e:
             print(f"  ✗ {url} — {e}")
     return all_docs
+
+
+def download_linked_docs(
+    page_url: str,
+    save_dir: str | Path,
+    extensions: tuple = (".docx", ".doc", ".pdf", ".xlsx", ".xlsm", ".xls"),
+) -> List[Path]:
+    """
+    Télécharge tous les fichiers liés (.docx, .pdf, etc.) trouvés sur une page.
+    Retourne la liste des chemins vers les fichiers téléchargés.
+    """
+    save_path = Path(save_dir)
+    save_path.mkdir(parents=True, exist_ok=True)
+
+    try:
+        r = requests.get(page_url, headers=HEADERS, timeout=15)
+        r.raise_for_status()
+    except Exception as e:
+        print(f"  [ERR] Impossible d'acceder a {page_url}: {e}")
+        return []
+
+    soup = BeautifulSoup(r.text, "lxml")
+    downloaded: List[Path] = []
+
+    for a in soup.find_all("a", href=True):
+        href = a["href"].split("?")[0].split("#")[0]
+        if not any(href.lower().endswith(ext) for ext in extensions):
+            continue
+
+        file_url = urljoin(page_url, href)
+        filename = Path(urlparse(file_url).path).name
+        if not filename:
+            continue
+
+        dest = save_path / filename
+        if dest.exists():
+            print(f"  [SKIP] {filename} (deja present)")
+            downloaded.append(dest)
+            continue
+
+        try:
+            resp = requests.get(file_url, headers=HEADERS, timeout=30)
+            resp.raise_for_status()
+            dest.write_bytes(resp.content)
+            print(f"  [DL] {filename} ({len(resp.content) // 1024} Ko)")
+            downloaded.append(dest)
+        except Exception as e:
+            print(f"  [ERR] {filename} - {e}")
+
+    return downloaded

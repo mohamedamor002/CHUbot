@@ -54,8 +54,8 @@ def load_directory(dir_path: str) -> List[Document]:
             try:
                 docs = load_document(str(file))
                 all_docs.extend(docs)
-                print(f"  ✓ {file.name} ({len(docs)} page(s))")
+                print(f"  [OK] {file.name} ({len(docs)} page(s))")
             except Exception as e:
-                print(f"  ✗ {file.name} — erreur : {e}")
+                print(f"  [ERR] {file.name} - erreur : {e}")
 
     return all_docs

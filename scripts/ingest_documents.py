@@ -27,7 +27,7 @@ def ingest_directory(dir_path: str):
 
     print(f"\nIndexation de {len(docs)} page(s) dans ChromaDB...")
     count = index_documents(docs)
-    print(f"\nTerminé — {count} chunks indexés.")
+    print(f"\nTermine - {count} chunks indexes.")
 
 
 def ingest_file(file_path: str):
