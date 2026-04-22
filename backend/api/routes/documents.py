@@ -3,7 +3,7 @@ import tempfile
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.core.database import get_db
@@ -99,10 +99,10 @@ async def serve_document(filename: str):
 
     ext = safe_path.suffix.lower()
     media_type = MIME_TYPES.get(ext, "application/octet-stream")
+    content = safe_path.read_bytes()
 
-    return FileResponse(
-        path=str(safe_path),
-        filename=filename,
+    return Response(
+        content=content,
         media_type=media_type,
         headers={"Content-Disposition": f"inline; filename=\"{filename}\""},
     )
