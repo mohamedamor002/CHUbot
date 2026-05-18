@@ -8,9 +8,9 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from alembic import context
 
 # Charger les modèles pour l'autogenerate
-import backend.domain.models  # noqa: F401
-from backend.core.database import Base
-from backend.core.config.settings import settings
+import bot.api.db.models  # noqa: F401
+from bot.api.db.database import Base
+from bot.config.settings import settings
 
 config = context.config
 

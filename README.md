@@ -1,7 +1,7 @@
-# CHUbot — Assistant RH Intelligent
+# CHUbot — Assistant RH du CHU d'Angers
 
-Chatbot RAG (Retrieval-Augmented Generation) pour le service RH du CHU.  
-Les employés posent leurs questions en langage naturel et obtiennent des réponses basées sur les documents RH officiels.
+Chatbot RAG (Retrieval-Augmented Generation) pour la Direction des Ressources Humaines du CHU d'Angers.  
+Les agents internes posent leurs questions en langage naturel et obtiennent des réponses basées sur les documents RH officiels.
 
 ---
 
@@ -9,33 +9,50 @@ Les employés posent leurs questions en langage naturel et obtiennent des répon
 
 ```
 CHUbot/
-├── backend/                  # API FastAPI
-│   ├── api/routes/           # Endpoints REST (chat, documents)
-│   ├── core/                 # Configuration, base de données
-│   ├── domain/               # Modèles SQLAlchemy + schémas Pydantic
-│   └── rag/                  # Pipeline RAG
-│       ├── loaders/          # Chargement PDF, Word, Excel
-│       ├── chunkers/         # Découpage en chunks
-│       ├── embeddings/       # Embeddings via Ollama
-│       ├── indexer/          # ChromaDB (vector store)
-│       └── retrieval/        # Chaîne LangChain + LLM Ollama
-├── frontend/                 # Interface React + Tailwind CSS
-│   └── src/
-│       ├── api/              # Client axios
-│       ├── components/
-│       │   ├── chat/         # Bulles de message, input, fenêtre de chat
-│       │   ├── sidebar/      # Navigation, nouvelle conversation
-│       │   └── documents/    # Upload et liste des documents
-│       └── App.jsx
-├── scripts/                  # Scripts utilitaires
-│   └── ingest_documents.py   # Ingestion batch de documents RH
+├── bot/
+│   ├── config/
+│   │   ├── settings.py        ← Variables d'environnement (Pydantic)
+│   │   └── departments.py     ← 5 sous-départements RH + emails d'escalade
+│   ├── ingestion/             ← Pipeline offline (docs → chunks → vecteurs)
+│   │   ├── loaders.py         ← PDF, DOCX, Excel, scraping web
+│   │   ├── splitter.py        ← Découpage en chunks
+│   │   └── indexer.py         ← ChromaDB + CLI d'ingestion
+│   ├── retrieval/             ← Pipeline online (question → réponse)
+│   │   ├── prompt.py          ← Prompt système RH (5 départements, escalade)
+│   │   └── chain.py           ← Chaîne RAG : retrieval → LLM → réponse
+│   ├── api/                   ← Couche HTTP (FastAPI)
+│   │   ├── app.py             ← Point d'entrée
+│   │   ├── db/
+│   │   │   ├── database.py    ← Connexion PostgreSQL async
+│   │   │   ├── models.py      ← 6 tables SQLAlchemy
+│   │   │   └── schemas.py     ← Schémas Pydantic
+│   │   └── routes/
+│   │       ├── chat.py        ← POST /chat, /chat/stream, GET /sessions
+│   │       ├── documents.py   ← Upload, liste, visualisation
+│   │       ├── feedback.py    ← Retours utilisateurs
+│   │       └── analytics.py   ← KPIs de performance
+│   └── ui/                    ← Interface React 18 + Tailwind CSS
 ├── data/
-│   ├── documents/            # Fichiers sources PDF/Excel (non versionné)
-│   └── indexes/              # Données ChromaDB (non versionné)
-├── alembic/                  # Migrations de base de données
-├── .env                      # Variables d'environnement (non versionné)
+│   ├── documents/             ← Fichiers sources PDF/DOCX/Excel (non versionné)
+│   └── indexes/               ← Index ChromaDB (non versionné)
+├── alembic/                   ← Migrations PostgreSQL
+├── .env                       ← Variables d'environnement (non versionné)
 └── requirements.txt
 ```
+
+---
+
+## Périmètre fonctionnel (Phase 1)
+
+Le chatbot couvre les 5 sous-départements identifiés lors des ateliers (avril 2026) :
+
+| Sous-département | Thématiques |
+|---|---|
+| Recrutement & Effectifs | Concours, mobilité interne |
+| Service des Rémunérations | Primes, calendrier de paie, remboursements transport |
+| Gestion du Temps de Travail | Congés, RTT, absences, missions |
+| Parcours Professionnels | Formation, protection sociale, handicap/RME |
+| Service des Carrières | Avancement, retraite, médailles, positions statutaires |
 
 ---
 
@@ -43,10 +60,10 @@ CHUbot/
 
 | Couche | Technologie |
 |--------|-------------|
-| Backend | FastAPI, Python 3.14 |
-| LLM | Ollama (local) — modèle configurable via `.env` |
+| Backend | FastAPI, Python 3.11+ |
+| LLM | Ollama local — configurable via `.env` |
 | Embeddings | Ollama `nomic-embed-text` |
-| Vector Store | ChromaDB (local) |
+| Vector Store | ChromaDB (local, persistant) |
 | RAG | LangChain |
 | Base de données | PostgreSQL + SQLAlchemy async |
 | Frontend | React 18, Vite, Tailwind CSS |
@@ -64,60 +81,47 @@ CHUbot/
 
 ## Installation
 
-### 1. Cloner le projet
-
-```bash
-git clone <url-du-repo>
-cd CHUbot
-```
-
-### 2. Backend — environnement Python
+### 1. Environnement Python
 
 ```bash
 python -m venv .venv
-# Windows
-.venv\Scripts\activate
-# Linux/Mac
-source .venv/bin/activate
-
+.venv\Scripts\activate          # Windows
+# source .venv/bin/activate     # Linux/Mac
 pip install -r requirements.txt
 ```
 
-### 3. Configurer les variables d'environnement
+### 2. Variables d'environnement
 
 ```bash
-cp .env.example .env
+copy .env.example .env
 ```
 
-Modifier `.env` avec vos valeurs :
+Modifier `.env` :
 
 ```env
-DATABASE_URL=postgresql+asyncpg://postgres:VOTRE_MOT_DE_PASSE@localhost:5432/chubot
-OLLAMA_BASE_URL=http://localhost:11434
-OLLAMA_MODEL=qwen3.5:latest
-JWT_SECRET_KEY=votre-cle-secrete-256-bits
+DATABASE_URL=postgresql+asyncpg://postgres:MOT_DE_PASSE@localhost:5432/chubot
+OLLAMA_MODEL=qwen2.5:9b
 ```
 
-### 4. Créer la base de données
+### 3. Base de données
 
 ```bash
-# Créer la base dans PostgreSQL
 psql -U postgres -c "CREATE DATABASE chubot;"
 ```
 
-Les tables sont créées automatiquement au démarrage du serveur.
+Les tables sont créées automatiquement au premier démarrage.
 
-### 5. Télécharger les modèles Ollama
+### 4. Modèles Ollama
 
 ```bash
-ollama pull qwen3.5:latest    # LLM (configurable via OLLAMA_MODEL dans .env)
-ollama pull nomic-embed-text  # Embeddings
+ollama pull qwen2.5:9b          # LLM
+ollama pull nomic-embed-text    # Embeddings
 ```
 
-### 6. Frontend — dépendances Node
+### 5. Frontend
 
 ```bash
-cd frontend
+cd bot/ui
 npm install
 ```
 
@@ -125,93 +129,65 @@ npm install
 
 ## Lancement
 
-Ouvrir **deux terminaux** :
-
 **Terminal 1 — Backend :**
 ```bash
-cd CHUbot
 .venv\Scripts\activate
-uvicorn backend.main:app --reload
-# Disponible sur http://localhost:8000
+uvicorn bot.api.app:app --reload
+# API disponible sur http://localhost:8000
+# Docs interactives : http://localhost:8000/docs
 ```
 
 **Terminal 2 — Frontend :**
 ```bash
-cd CHUbot/frontend
+cd bot/ui
 npm run dev
-# Disponible sur http://localhost:5173
+# Interface disponible sur http://localhost:5173
 ```
 
 ---
 
-## Utilisation
-
-1. Ouvrir **http://localhost:5173** dans le navigateur
-2. Aller dans l'onglet **Documents** (sidebar gauche)
-3. Uploader un document RH (PDF, Word ou Excel, max 20 Mo)
-4. Aller dans l'onglet **Conversation**
-5. Poser une question en français
-
----
-
-## API REST
-
-Documentation interactive disponible sur **http://localhost:8000/docs**
-
-| Méthode | Endpoint | Description |
-|---------|----------|-------------|
-| `GET` | `/health` | Statut du serveur |
-| `POST` | `/api/v1/documents/upload` | Uploader et indexer un document |
-| `GET` | `/api/v1/documents/` | Lister les documents indexés |
-| `POST` | `/api/v1/chat` | Poser une question (réponse complète) |
-| `POST` | `/api/v1/chat/stream` | Poser une question (streaming token par token) |
-| `GET` | `/api/v1/chat/sessions/{id}` | Historique d'une session |
-
----
-
-## Configuration RAG
-
-Paramètres ajustables dans `.env` :
-
-| Variable | Défaut | Description |
-|----------|--------|-------------|
-| `OLLAMA_MODEL` | `qwen3.5:latest` | Modèle LLM (plus grand = plus précis mais plus lent) |
-| `EMBEDDING_MODEL` | `nomic-embed-text` | Modèle d'embeddings |
-| `CHUNK_SIZE` | `512` | Taille des chunks de documents (en tokens) |
-| `CHUNK_OVERLAP` | `64` | Chevauchement entre chunks |
-| `RETRIEVAL_TOP_K` | `3` | Nombre de chunks récupérés par requête |
-
----
-
-## Formats de documents supportés
-
-| Format | Extension |
-|--------|-----------|
-| PDF | `.pdf` |
-| Word | `.docx`, `.doc` |
-| Excel | `.xlsx`, `.xls`, `.xlsm` |
-
-Taille maximale : **20 Mo** par fichier (upload via API).
-
----
-
-## Ingestion batch de documents
-
-Pour indexer plusieurs documents d'un coup sans passer par l'interface :
+## Ingestion des documents
 
 ```bash
-# Placer les fichiers dans data/documents/, puis :
-python scripts/ingest_documents.py --dir data/documents
+# Indexer tous les documents du dossier data/documents/
+python -m bot.ingestion.indexer --dir data/documents
 
-# Ou un seul fichier :
-python scripts/ingest_documents.py --file chemin/vers/fichier.pdf
+# Indexer un fichier unique
+python -m bot.ingestion.indexer --file data/documents/guide_primes.pdf
+
+# Indexer les URLs documentaires du rapport Phase 1
+python -m bot.ingestion.indexer --urls
+
+# Vider l'index avant de réindexer
+python -m bot.ingestion.indexer --reset --dir data/documents
 ```
 
 ---
 
-## Ce qui reste à implémenter
+## Endpoints API
 
-- [ ] Authentification JWT (login/register)
-- [ ] Mémoire conversationnelle (historique passé au LLM)
-- [ ] Suppression de documents indexés
-- [ ] Dockerisation pour le déploiement
+| Méthode | URL | Description |
+|---------|-----|-------------|
+| `POST` | `/api/v1/chat` | Question → réponse complète |
+| `POST` | `/api/v1/chat/stream` | Question → streaming token |
+| `GET`  | `/api/v1/chat/sessions` | Liste des conversations |
+| `GET`  | `/api/v1/chat/sessions/{id}` | Historique d'une session |
+| `POST` | `/api/v1/documents/upload` | Upload + indexation d'un fichier |
+| `GET`  | `/api/v1/documents/` | Liste des documents indexés |
+| `GET`  | `/api/v1/documents/file/{nom}` | Visualiser un document |
+| `POST` | `/api/v1/feedback` | Soumettre un retour |
+| `GET`  | `/api/v1/analytics/kpis` | KPIs de performance |
+| `GET`  | `/health` | État du serveur |
+
+---
+
+## Structure de la base de données
+
+| Table | Rôle |
+|-------|------|
+| `users` | Comptes agents (prêt pour auth V2) |
+| `conversation_sessions` | Sessions de conversation |
+| `messages` | Échanges human/assistant |
+| `feedback` | Retours is_helpful + rating 1-5 |
+| `message_metrics` | Temps de réponse, couverture, escalade |
+| `indexed_documents` | Traçabilité des fichiers indexés |

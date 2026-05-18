@@ -10,6 +10,7 @@ pydantic-settings>=2.7.0
 # ── LLM & RAG Orchestration ───────────────────────────────────────────────────
 langchain>=0.3.0
 langchain-community>=0.3.0
+langchain-classic>=0.1.0          # EnsembleRetriever (hybrid BM25 + vecteur)
 langchain-ollama>=1.1.0           # intégration Ollama (modèles locaux)
 langchain-chroma>=0.1.0           # intégration ChromaDB pour LangChain
 langchain-text-splitters>=0.3.0   # découpage de documents
@@ -40,6 +41,10 @@ playwright>=1.50.0                # navigateur headless pour pages JavaScript
 
 # ── HTTP Client ───────────────────────────────────────────────────────────────
 httpx>=0.28.0
+
+# ── Hybrid Search & Reranking ─────────────────────────────────────────────────
+rank-bm25>=0.2.2                  # BM25 lexical retrieval pour hybrid search
+flashrank>=0.2.9                  # cross-encoder léger pour reranking (sans GPU)
 
 # ── Testing ───────────────────────────────────────────────────────────────────
 pytest>=8.3.0
