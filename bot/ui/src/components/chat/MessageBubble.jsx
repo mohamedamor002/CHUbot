@@ -14,24 +14,36 @@ const IconWeb = () => (
   </svg>
 )
 
+// Toujours utiliser l'URL absolue — openUrl ne gère pas les URLs relatives
+const BACKEND_URL = 'http://127.0.0.1:8765'
+
+async function openSource(url) {
+  if (!url) return
+  try {
+    const { openUrl } = await import(/* @vite-ignore */ '@tauri-apps/plugin-opener')
+    await openUrl(url)
+  } catch (err) {
+    console.error('[openSource] erreur opener, fallback window.open:', err)
+    window.open(url, '_blank', 'noreferrer')
+  }
+}
+
 function SourceLink({ source }) {
   const isWeb = source.type === 'web'
   const href = isWeb
     ? source.url
-    : `/api/v1/documents/file/${encodeURIComponent(source.name)}`
+    : `${BACKEND_URL}/api/v1/documents/file/${encodeURIComponent(source.name)}`
 
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noreferrer"
-      className="flex items-center gap-1.5 text-xs hover:underline truncate"
+    <button
+      onClick={() => openSource(href)}
+      className="flex items-center gap-1.5 text-xs hover:underline truncate text-left w-full"
       style={{ color: isWeb ? '#2563eb' : '#dc2626' }}
-      title={source.name}
+      title={`Ouvrir : ${source.name}`}
     >
       {isWeb ? <IconWeb /> : <IconPdf />}
       <span className="truncate">{source.name}</span>
-    </a>
+    </button>
   )
 }
 

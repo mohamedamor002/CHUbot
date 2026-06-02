@@ -31,7 +31,7 @@ COLLECTION_NAME = "chubot_hr_docs"
 def get_embeddings() -> OllamaEmbeddings:
     return OllamaEmbeddings(
         model=settings.EMBEDDING_MODEL,
-        base_url=settings.OLLAMA_BASE_URL,
+        base_url=settings.EMBEDDING_BASE_URL,
     )
 
 

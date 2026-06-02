@@ -30,20 +30,49 @@ _HEADERS = {
 # ── Fichiers locaux ───────────────────────────────────────────────────────────
 
 def _load_excel(path: Path) -> List[Document]:
-    """Charge un fichier Excel avec openpyxl — plus fiable qu'UnstructuredExcelLoader."""
+    """Charge un fichier Excel et formate chaque ligne en clé:valeur lisible.
+
+    Avant : "Infirmier\t5%\t>10 ans\t450€"
+    Après : "Grade: Infirmier | Taux: 5% | Ancienneté: >10 ans | Montant: 450€"
+
+    La première ligne non-vide est traitée comme en-tête de colonnes.
+    """
     import openpyxl
     wb = openpyxl.load_workbook(str(path), read_only=True, data_only=True)
     docs = []
     for sheet in wb.sheetnames:
         ws = wb[sheet]
-        rows = []
-        for row in ws.iter_rows(values_only=True):
-            row_text = "\t".join(str(c) if c is not None else "" for c in row).strip()
-            if row_text:
-                rows.append(row_text)
-        if rows:
+        all_rows = list(ws.iter_rows(values_only=True))
+        if not all_rows:
+            continue
+
+        # Trouver la première ligne non-vide → en-têtes
+        headers: list[str] | None = None
+        data_start = 0
+        for i, row in enumerate(all_rows):
+            non_empty = [c for c in row if c is not None and str(c).strip()]
+            if non_empty:
+                headers = [str(c).strip() if c is not None and str(c).strip() else f"Col{j+1}"
+                           for j, c in enumerate(row)]
+                data_start = i + 1
+                break
+
+        if not headers:
+            continue
+
+        formatted_rows = []
+        for row in all_rows[data_start:]:
+            parts = []
+            for header, val in zip(headers, row):
+                if val is not None and str(val).strip():
+                    parts.append(f"{header}: {val}")
+            if parts:
+                formatted_rows.append(" | ".join(parts))
+
+        if formatted_rows:
+            content = f"[Feuille: {sheet}]\n" + "\n".join(formatted_rows)
             docs.append(Document(
-                page_content="\n".join(rows),
+                page_content=content,
                 metadata={"source_file": path.name, "file_type": path.suffix.lstrip("."), "sheet": sheet},
             ))
     wb.close()
@@ -67,11 +96,14 @@ def load_file(file_path: str) -> List[Document]:
     else:
         return _load_excel(path)
 
+    from bot.ingestion.cleaner import clean_text
     docs = loader.load()
     for doc in docs:
         doc.metadata["source_file"] = path.name
         doc.metadata["file_type"] = ext.lstrip(".")
-    return docs
+        doc.page_content = clean_text(doc.page_content)
+    # Retire les pages devenues vides après nettoyage
+    return [d for d in docs if len(d.page_content.strip()) > 50]
 
 
 def load_directory(dir_path: str) -> List[Document]:
@@ -131,6 +163,9 @@ def load_url(url: str, use_js: bool = False) -> List[Document]:
 
     if not text or len(text.strip()) < 100:
         return []
+
+    from bot.ingestion.cleaner import clean_text
+    text = clean_text(text)
 
     try:
         r = requests.get(url, headers=_HEADERS, timeout=10)

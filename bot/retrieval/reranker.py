@@ -13,6 +13,11 @@ from typing import List
 
 from langchain_core.documents import Document
 
+# Seuil minimum de pertinence : un document en dessous est ignoré comme source.
+# FlashRank ms-marco produit des scores généralement entre -5 et +5 (non bornés à 1).
+# 0.0 = neutre ; les documents hors-sujet tombent souvent en négatif ou très proche de 0.
+_SCORE_THRESHOLD: float = 0.05
+
 
 @lru_cache(maxsize=1)
 def _get_ranker():
@@ -22,17 +27,13 @@ def _get_ranker():
 
 
 def rerank(query: str, docs: List[Document], top_n: int = 3) -> List[Document]:
-    """Re-score les documents avec un cross-encoder et retourne les top_n.
+    """Re-score les documents avec un cross-encoder et retourne les top_n pertinents.
+
+    Les documents dont le score cross-encoder est inférieur à _SCORE_THRESHOLD sont
+    exclus, même s'ils sont dans les top_n — cela évite d'afficher des sources
+    hors-sujet quand le retrieval n'a pas trouvé de documents vraiment pertinents.
 
     Si FlashRank n'est pas disponible, retourne les docs dans l'ordre original.
-
-    Args:
-        query:  question originale de l'utilisateur
-        docs:   documents triés par similarité vectorielle
-        top_n:  nombre de documents à conserver après reranking
-
-    Returns:
-        Liste de Documents re-triés par score cross-encoder (desc), tronquée à top_n
     """
     if not docs:
         return docs
@@ -47,10 +48,15 @@ def rerank(query: str, docs: List[Document], top_n: int = 3) -> List[Document]:
         request = RerankRequest(query=query, passages=passages)
         results = ranker.rerank(request)
 
-        # results est trié desc par score ; on prend les top_n
-        reranked = [docs[r["id"]] for r in results[:top_n]]
+        reranked = []
+        for r in results[:top_n]:
+            score = r.get("score", 0.0)
+            if score >= _SCORE_THRESHOLD:
+                doc = docs[r["id"]]
+                doc.metadata["_rerank_score"] = round(float(score), 4)
+                reranked.append(doc)
+
         return reranked
 
     except Exception:
-        # FlashRank non installé ou erreur réseau au téléchargement du modèle
         return docs[:top_n]

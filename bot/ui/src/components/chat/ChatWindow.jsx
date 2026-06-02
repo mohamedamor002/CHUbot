@@ -1,13 +1,27 @@
 import { useEffect, useRef, useState } from 'react'
 import MessageBubble from './MessageBubble.jsx'
 import ChatInput from './ChatInput.jsx'
+import WindowControls from '../WindowControls.jsx'
 import { sendMessageStream, getSession } from '../../api/client.js'
 
-export default function ChatWindow({ sessionId, onSessionChange }) {
+export default function ChatWindow({ sessionId, onSessionChange, onMinimize }) {
   const [messages, setMessages] = useState([])
   const [loading, setLoading] = useState(false)
   const bottomRef = useRef(null)
-  const skipNextLoad = useRef(false) // évite d'écraser les messages en cours après création
+  const skipNextLoad = useRef(false)
+  const winRef = useRef(null)
+
+  // Pré-charge la référence Tauri pour le drag programmatique
+  useEffect(() => {
+    import('@tauri-apps/api/webviewWindow')
+      .then(({ WebviewWindow }) => { winRef.current = WebviewWindow.getCurrent() })
+      .catch(() => {})
+  }, [])
+
+  function handleDragStart(e) {
+    e.preventDefault()
+    winRef.current?.startDragging().catch(() => {})
+  }
 
   // Charger l'historique uniquement si on reprend une session existante (pas une nouvelle)
   useEffect(() => {
@@ -77,10 +91,20 @@ export default function ChatWindow({ sessionId, onSessionChange }) {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
-      <div className="px-6 py-4 border-b border-slate-200 bg-white">
-        <h1 className="text-base font-semibold text-slate-800">Assistant RH - CHUbot</h1>
-        <p className="text-xs text-slate-500">Posez vos questions sur les politiques et procedures RH</p>
+      {/* Header — drag programmatique via startDragging() */}
+      <div
+        onMouseDown={handleDragStart}
+        className="pl-4 pr-4 pt-7 pb-3 border-b border-slate-200 bg-white flex items-center justify-between flex-shrink-0 select-none cursor-grab active:cursor-grabbing"
+      >
+        <div className="flex-1 min-w-0">
+          <h1 className="text-sm font-semibold text-slate-800 leading-tight truncate">Assistant RH — CHUbot</h1>
+          <p className="text-xs text-slate-400">CHU d'Angers · DRH</p>
+        </div>
+        {onMinimize && (
+          <div style={{ flexShrink: 0 }} onMouseDown={(e) => e.stopPropagation()}>
+            <WindowControls onMinimize={onMinimize} />
+          </div>
+        )}
       </div>
 
       {/* Messages */}

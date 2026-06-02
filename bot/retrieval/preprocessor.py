@@ -3,7 +3,8 @@ Pré-traitement des requêtes utilisateur avant retrieval.
 
 Deux transformations appliquées :
   1. Expansion des acronymes RH → améliore la similarité sémantique avec les docs
-  2. Détection du sous-département → filtre les chunks au retrieval
+  2. Query rewriting via LLM → reformule en mots-clés précis, évite les confusions sémantiques
+  3. Détection du sous-département → filtre les chunks au retrieval
 """
 
 import re
@@ -51,7 +52,6 @@ def expand_acronyms(text: str) -> str:
     """Remplace les acronymes RH par leur forme complète.
 
     'Mon RTT' → 'Mon Réduction du Temps de Travail (RTT)'
-    Améliore la similarité sémantique avec les documents indexés.
     """
     result = text
     for pattern, expansion in _ACRONYM_PATTERNS.items():
@@ -59,17 +59,16 @@ def expand_acronyms(text: str) -> str:
     return result
 
 
-def preprocess_query(question: str) -> Tuple[str, Optional[Department]]:
+async def preprocess_query(question: str) -> Tuple[str, Optional[Department]]:
     """Prépare la requête pour le retrieval.
 
     Returns:
-        enriched_question : question avec acronymes expansés
+        enriched_question : requête reformulée par le LLM (acronymes expansés + rewriting)
         detected_dept     : sous-département détecté (None si non identifié)
-
-    Exemple :
-        "Comment utiliser mon CET ?" →
-        ("Comment utiliser mon Compte Épargne-Temps (CET) ?", dept_gtt)
     """
-    enriched = expand_acronyms(question)
+    from bot.retrieval.query_rewriter import rewrite_query
+
+    expanded = expand_acronyms(question)
+    enriched = await rewrite_query(expanded)
     dept = detect_department(question)
     return enriched, dept

@@ -15,10 +15,18 @@ import re
 from functools import lru_cache
 from typing import List, Optional, Tuple
 
+# Patterns de small talk / salutations — pas de retrieval pour ces messages
+_SMALL_TALK = re.compile(
+    r"^\s*("
+    r"(bonjour|bonsoir|salut|coucou|hello|hi|hey|bonne\s+(journ[eé]e|nuit|soir[eé]e)|merci|au revoir|bye|ok|oui|non|bien|super|parfait|d'accord|ok|svp|s'il vous plait)"
+    r"[\s!?.]*"
+    r")\s*$",
+    re.IGNORECASE,
+)
+
 log = logging.getLogger(__name__)
 
 from langchain_core.documents import Document
-from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import ChatOllama
 
@@ -43,6 +51,9 @@ _NO_DOCS_MESSAGE = (
 # Nombre de docs après reranking transmis au LLM (r ≤ k)
 _RERANK_TOP_N: int = 3
 
+# Cache module-level pour éviter de recharger la collection à chaque requête
+_all_docs_cache: Optional[List[Document]] = None
+
 # ── Patterns de détection post-génération ────────────────────────────────────
 
 _ESCALATION_PATTERN = re.compile(
@@ -64,23 +75,25 @@ _NOT_COVERED_PATTERN = re.compile(
 
 @lru_cache(maxsize=1)
 def _get_llm() -> ChatOllama:
+    auth = settings.ollama_auth_headers
     return ChatOllama(
         model=settings.OLLAMA_MODEL,
         base_url=settings.OLLAMA_BASE_URL,
+        client_kwargs={"headers": auth} if auth else {},
         temperature=0.1,
         num_ctx=4096,
         num_predict=512,
-        reasoning=False,    # désactive le mode "thinking" de qwen3/deepseek
     )
 
 
 @lru_cache(maxsize=1)
-def _get_chain():
-    prompt = ChatPromptTemplate.from_messages([
+def _get_prompt() -> ChatPromptTemplate:
+    return ChatPromptTemplate.from_messages([
         ("system", SYSTEM_PROMPT),
         ("human", "{question}"),
     ])
-    return prompt | _get_llm() | StrOutputParser()
+
+
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -178,18 +191,17 @@ async def _hybrid_search(
 
 
 async def _get_all_docs() -> List[Document]:
-    """Charge tous les documents du vector store pour initialiser BM25.
-
-    BM25 a besoin d'un corpus complet à l'initialisation ; on le charge une
-    seule fois depuis ChromaDB (collection entière, sans filtre).
-    """
+    """Charge tous les documents du vector store pour initialiser BM25 (mis en cache)."""
+    global _all_docs_cache
+    if _all_docs_cache is not None:
+        return _all_docs_cache
     store = get_vector_store()
     try:
-        # ChromaDB : get() sans filtre retourne toute la collection
         raw = store._collection.get(include=["documents", "metadatas"])
         docs = []
         for content, meta in zip(raw["documents"], raw["metadatas"]):
             docs.append(Document(page_content=content, metadata=meta or {}))
+        _all_docs_cache = docs
         return docs
     except Exception:
         return []
@@ -229,35 +241,45 @@ async def _search(query: str, dept: Optional[Department]) -> List[Document]:
     if not docs:
         return docs
 
-    return rerank(query, docs, top_n=_RERANK_TOP_N)
+    reranked = rerank(query, docs, top_n=_RERANK_TOP_N)
+    if reranked:
+        scores = [d.metadata.get("_rerank_score", "?") for d in reranked]
+        log.debug("rerank scores for '%s': %s", query[:60], scores)
+    else:
+        log.info("no docs above rerank threshold for query: '%s'", query[:60])
+    return reranked
 
 
 # ── API publique ──────────────────────────────────────────────────────────────
 
 async def retrieve(question: str) -> Tuple[str, List[dict], bool]:
     """Pré-traite la question et retourne (contexte, sources, is_covered)."""
-    enriched_question, detected_dept = preprocess_query(question)
+    # Small talk → pas de retrieval, le LLM répond librement sans sources
+    if _SMALL_TALK.match(question):
+        return "", [], True
+
+    enriched_question, detected_dept = await preprocess_query(question)
     docs = await _search(enriched_question, detected_dept)
     is_covered = len(docs) > 0
     return _format_context(docs), _extract_sources(docs), is_covered
 
 
 async def stream_answer(context: str, question: str, is_covered: bool = True):
-    """Streaming token par token.
-    Court-circuite le LLM si aucun document trouvé.
-    """
+    """Streaming token par token."""
     if not is_covered:
         yield _NO_DOCS_MESSAGE
         return
-    async for chunk in _get_chain().astream({"context": context, "question": question}):
-        yield chunk
+    messages = _get_prompt().format_messages(context=context, question=question)
+    async for chunk in _get_llm().astream(messages):
+        if chunk.content:
+            yield chunk.content
 
 
 async def ask(question: str) -> str:
-    """Réponse complète (non streamée).
-    Court-circuite le LLM si aucun document trouvé.
-    """
+    """Réponse complète (non streamée)."""
     context, _, is_covered = await retrieve(question)
     if not is_covered:
         return _NO_DOCS_MESSAGE
-    return await _get_chain().ainvoke({"context": context, "question": question})
+    messages = _get_prompt().format_messages(context=context, question=question)
+    msg = await _get_llm().ainvoke(messages)
+    return msg.content or ""

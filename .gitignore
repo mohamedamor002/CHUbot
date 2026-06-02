@@ -26,8 +26,27 @@ Thumbs.db
 .idea/
 
 # Node
-frontend/node_modules/
-frontend/dist/
+bot/ui/node_modules/
+bot/ui/dist/
+
+# Tauri build artifacts (très lourd ~2-3 GB)
+bot/ui/src-tauri/target/
+
+# Binaire sidecar compilé (regénéré via PyInstaller)
+bot/ui/src-tauri/binaries/
+
+# Fichiers générés par Tauri (schemas, etc.)
+bot/ui/src-tauri/gen/
+
+# PyInstaller output
+dist/
+build/
+
+# Installeur final (distribué séparément, pas versionné)
+installer/
+
+# FlashRank model cache
+.cache/
 
 # Alembic generated (garder les scripts, pas les données)
 *.db
