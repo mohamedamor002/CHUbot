@@ -1,0 +1,878 @@
+{
+  "metadata": {
+    "titre": "Dataset de questions-réponses — Chatbot RH CHU d'Angers",
+    "version": "1.0",
+    "date_creation": "2026-06-02",
+    "sources": [
+      "https://www.agents-chu-angers.fr/faq-numeros-utiles/",
+      "https://www.agents-chu-angers.fr/je-travaille-au-chu/droits-obligations-et-plus/ma-remuneration/",
+      "https://www.agents-chu-angers.fr/formulaires-utiles/",
+      "https://www.agents-chu-angers.fr/je-travaille-au-chu/droits-obligations-et-plus/mes-conges-absences-ou-disponibilites/",
+      "https://www.agents-chu-angers.fr/je-travaille-au-chu/ma-carriere/ma-fin-d-activite/",
+      "https://www.agents-chu-angers.fr/je-travaille-au-chu/ma-carriere/mon-avancement-de-carriere/",
+      "https://www.agents-chu-angers.fr/je-travaille-au-chu/ma-carriere/ma-formation/",
+      "https://www.agents-chu-angers.fr/je-travaille-au-chu/ma-protection-ma-sante/les-arrets-et-accidents/",
+      "https://www.agents-chu-angers.fr/je-travaille-au-chu/ma-protection-ma-sante/handicap-au-travail/",
+      "https://www.agents-chu-angers.fr/je-travaille-au-chu/vie-pratique/creches/",
+      "https://www.agents-chu-angers.fr/je-travaille-au-chu/vie-sociale/cgos-action-sociale-et-culturelle/",
+      "NI_2025-15 — Études promotionnelles / régime indemnitaire",
+      "NI_2025-18 — Maintien de traitement à 90 % pendant le CMO",
+      "NI_2025-46 — Forfait mobilités durables (FMD)",
+      "Formulaire déclaration d'accident de service/trajet",
+      "Formulaire CET — demande d'utilisation de jours épargnés",
+      "Formulaire demande de TPT",
+      "Formulaire demande de congés bonifiés",
+      "Formulaire demande de stage par comparaison",
+      "Formulaire formation individuelle intra-CHU",
+      "Formulaire changement de coordonnées bancaires",
+      "Formulaire ordre de mission mensuel",
+      "Formulaire astreintes / temps de trajet > 30 min",
+      "Notes sur primes et droits contractuels (document interne)"
+    ],
+    "nb_questions": 105
+  },
+  "questions_reponses": [
+
+    {
+      "id": "QR001",
+      "categorie": "Rémunération",
+      "sous_categorie": "Bulletins de salaire",
+      "question": "Comment accéder à mon coffre-fort numérique pour consulter mes bulletins de salaire dématérialisés ?",
+      "reponse": "Vous pouvez accéder à votre coffre-fort numérique Digiposte à tout moment depuis un ordinateur, une tablette ou un smartphone (application mobile disponible). Si vous n'avez pas reçu d'invitation par mail, rendez-vous sur https://adherer.digiposte.fr/chu-angers et renseignez votre matricule, votre adresse mail personnelle et un code de sécurité composé des 6 derniers chiffres de votre matricule suivi de votre jour et mois de naissance.",
+      "source": "FAQ agents-chu-angers.fr — section Dématérialisation des bulletins de salaire"
+    },
+    {
+      "id": "QR002",
+      "categorie": "Rémunération",
+      "sous_categorie": "Bulletins de salaire",
+      "question": "Je souhaite conserver mon bulletin de salaire en format papier. Comment faire ?",
+      "reponse": "Vous pouvez refuser la dématérialisation via l'application « Mes infos agent » sur l'intranet ou par mail à docaposteConsentement@chu-angers.fr si vous n'avez pas accès à l'intranet. Vous recevrez alors vos bulletins de salaire par envoi postal à votre domicile. Vous pouvez également annuler la dématérialisation à tout moment en vous connectant à Digiposte > onglet « Organismes » > sélectionner votre employeur > roue crantée > « Déconnecter l'organisme ».",
+      "source": "FAQ agents-chu-angers.fr — section Dématérialisation des bulletins de salaire"
+    },
+    {
+      "id": "QR003",
+      "categorie": "Rémunération",
+      "sous_categorie": "Bulletins de salaire",
+      "question": "Je quitte le CHU. Vais-je perdre l'accès à mes bulletins de salaire dans mon coffre-fort numérique ?",
+      "reponse": "Non. Une fois ouvert, le coffre-fort numérique Digiposte est à votre disposition à vie et gratuitement. Vous bénéficierez donc toujours de votre coffre-fort après votre départ du CHU.",
+      "source": "FAQ agents-chu-angers.fr — section Dématérialisation des bulletins de salaire"
+    },
+    {
+      "id": "QR004",
+      "categorie": "Rémunération",
+      "sous_categorie": "Bulletins de salaire",
+      "question": "Mes bulletins de salaire dématérialisés ont-ils la même valeur juridique que les bulletins papier ?",
+      "reponse": "Oui. Les bulletins de salaire numériques bénéficient de la même valeur juridique que les bulletins au format papier. Ils sont au format PDF et peuvent être enregistrés, transmis ou imprimés.",
+      "source": "FAQ agents-chu-angers.fr — section Dématérialisation des bulletins de salaire"
+    },
+    {
+      "id": "QR005",
+      "categorie": "Rémunération",
+      "sous_categorie": "Bulletins de salaire",
+      "question": "Ni le CHU ni Docaposte peuvent-ils accéder au contenu de mon coffre-fort numérique ?",
+      "reponse": "Correct. Ni le CHU ni le prestataire Docaposte ne peuvent accéder aux données contenues dans votre coffre-fort numérique. Le CHU a uniquement la possibilité de déposer vos bulletins de salaire chaque mois.",
+      "source": "FAQ agents-chu-angers.fr — section Dématérialisation des bulletins de salaire"
+    },
+    {
+      "id": "QR006",
+      "categorie": "Rémunération",
+      "sous_categorie": "RIB / Coordonnées bancaires",
+      "question": "Comment informer le service de la paie d'un changement de RIB ?",
+      "reponse": "Vous devez remplir le formulaire de changement de coordonnées bancaires (disponible sur agents-chu-angers.fr) et le transmettre accompagné de votre RIB en deux exemplaires. Le formulaire doit être signé. Pour le personnel non médical et les sages-femmes : s'adresser à la Direction des Ressources Humaines. Pour le personnel médical, pharmaceutique, biologique et odontologique : s'adresser à la Direction des Affaires Médicales.",
+      "source": "FAQ agents-chu-angers.fr + formulaire changement de coordonnées bancaires"
+    },
+    {
+      "id": "QR007",
+      "categorie": "Rémunération",
+      "sous_categorie": "Remboursement transport",
+      "question": "Comment obtenir le remboursement de mon abonnement de transports en commun (train, tram, bus) ?",
+      "reponse": "Transmettez un justificatif d'abonnement (facture) au bureau de la paie non-médicale pour le personnel non médical et les sages-femmes, ou à la paie médicale pour le personnel médical, pharmaceutique, biologique et odontologique.",
+      "source": "FAQ agents-chu-angers.fr — section Ma rémunération"
+    },
+    {
+      "id": "QR008",
+      "categorie": "Rémunération",
+      "sous_categorie": "Forfait mobilités durables",
+      "question": "Comment bénéficier du forfait mobilités durables (FMD) ?",
+      "reponse": "Vous devez remplir le formulaire en ligne avant le 31 décembre de l'année concernée, accompagné de vos pièces justificatives. Le formulaire est accessible à l'adresse indiquée dans la NI 2025/46 (via QR code ou lien Sphinx). À compter de 2025, aucune demande papier ou par mail n'est acceptée. Le versement intervient d'ici la fin du 1er semestre de l'année suivante.",
+      "source": "NI 2025/46 — Forfait mobilités durables"
+    },
+    {
+      "id": "QR009",
+      "categorie": "Rémunération",
+      "sous_categorie": "Forfait mobilités durables",
+      "question": "Quels modes de transport ouvrent droit au forfait mobilités durables ?",
+      "reponse": "Sont éligibles : le vélo et le vélo à assistance électrique, le covoiturage (conducteur ou passager), les engins de déplacement personnels motorisés non thermiques (trottinettes, gyropodes…) en location ou en libre-service, le service d'auto-partage avec véhicules électriques/hybrides/hydrogène. Ne sont pas éligibles : les scooters personnels, les voitures électriques personnelles et la marche à pied.",
+      "source": "FAQ agents-chu-angers.fr + NI 2025/46"
+    },
+    {
+      "id": "QR010",
+      "categorie": "Rémunération",
+      "sous_categorie": "Forfait mobilités durables",
+      "question": "Quel est le montant du forfait mobilités durables ?",
+      "reponse": "Le montant annuel est calculé selon le nombre de jours de déplacements domicile-travail réalisés : 100 € entre 30 et 59 jours, 200 € entre 60 et 99 jours, 300 € à partir de 100 jours. Le minimum requis pour être éligible est 30 jours d'utilisation d'un mode de transport alternatif.",
+      "source": "NI 2025/46 — Forfait mobilités durables"
+    },
+    {
+      "id": "QR011",
+      "categorie": "Rémunération",
+      "sous_categorie": "Forfait mobilités durables",
+      "question": "Puis-je cumuler le remboursement de mon abonnement de transport en commun avec le forfait mobilités durables ?",
+      "reponse": "Oui, le cumul entre le remboursement d'un abonnement de transport en commun et le bénéfice du forfait mobilités durables est possible.",
+      "source": "FAQ agents-chu-angers.fr — section Forfait mobilités durables"
+    },
+    {
+      "id": "QR012",
+      "categorie": "Rémunération",
+      "sous_categorie": "Forfait mobilités durables",
+      "question": "Je viens au travail à pied. Puis-je bénéficier du forfait mobilités durables ?",
+      "reponse": "Non. La réglementation ne prévoit pas l'attribution du forfait mobilités durables aux professionnels qui se déplacent à pied.",
+      "source": "FAQ agents-chu-angers.fr — section Forfait mobilités durables"
+    },
+    {
+      "id": "QR013",
+      "categorie": "Rémunération",
+      "sous_categorie": "Primes et indemnités",
+      "question": "Quand sont versées les indemnités de nuit, de dimanche et jours fériés ?",
+      "reponse": "Les éléments variables de paie (nuit, dimanches et jours fériés) sont payés deux mois après leur réalisation (M+2). Par exemple, des nuits effectuées en juin seront rémunérées en août.",
+      "source": "FAQ agents-chu-angers.fr + document interne Notes primes"
+    },
+    {
+      "id": "QR014",
+      "categorie": "Rémunération",
+      "sous_categorie": "Primes et indemnités",
+      "question": "Quand est versée la prime grand âge ?",
+      "reponse": "La prime grand âge est versée le mois suivant sa réalisation (M+1).",
+      "source": "Document interne — tableau des périodicités de paiement des primes"
+    },
+    {
+      "id": "QR015",
+      "categorie": "Rémunération",
+      "sous_categorie": "Primes et indemnités",
+      "question": "Quand est versée la prime d'exercice en soins critiques ?",
+      "reponse": "La prime d'exercice en soins critiques est versée deux mois après sa réalisation (M+2).",
+      "source": "Document interne — tableau des périodicités de paiement des primes"
+    },
+    {
+      "id": "QR016",
+      "categorie": "Rémunération",
+      "sous_categorie": "Primes et indemnités",
+      "question": "Quand sont versées les primes d'astreinte ?",
+      "reponse": "Les primes d'astreinte sont versées le mois suivant leur réalisation (M+1).",
+      "source": "Document interne — tableau des périodicités de paiement des primes"
+    },
+    {
+      "id": "QR017",
+      "categorie": "Rémunération",
+      "sous_categorie": "Missions Hublo",
+      "question": "J'ai effectué une mission Hublo mais je n'ai pas reçu le paiement. Que faire ?",
+      "reponse": "Les missions Hublo sont rémunérées le mois suivant leur réalisation. Votre encadrement doit avoir enregistré la mission avant le départ de paie. Si le paiement n'apparaît pas, contactez votre cadre de proximité afin qu'il vérifie la bonne validation de la mission et, le cas échéant, contacte le service des rémunérations. Les heures Hublo apparaissent sur votre bulletin au niveau des heures supplémentaires rémunérées.",
+      "source": "FAQ agents-chu-angers.fr — section Ma rémunération"
+    },
+    {
+      "id": "QR018",
+      "categorie": "Rémunération",
+      "sous_categorie": "Supplément familial",
+      "question": "Jusqu'à quel âge mon enfant ouvre-t-il droit au supplément familial de traitement ?",
+      "reponse": "Le supplément familial de traitement est calculé et attribué selon le nombre d'enfants à charge jusqu'aux 20 ans de l'enfant, sur présentation d'un justificatif de scolarité.",
+      "source": "FAQ agents-chu-angers.fr — section Ma rémunération"
+    },
+    {
+      "id": "QR019",
+      "categorie": "Rémunération",
+      "sous_categorie": "Remboursement frais de formation",
+      "question": "Comment obtenir le remboursement de mes frais de déplacement et d'hébergement lors d'une formation ?",
+      "reponse": "Remplissez le formulaire d'état de frais de déplacement et retournez-le au service de la formation continue accompagné de tous les justificatifs (billets SNCF, notes d'hôtel, notes de restaurant) dans le mois qui suit la formation. Pour les formations longues, envoyez les demandes de remboursement chaque mois. La prise en charge est effective uniquement si la formation se déroule hors Angers et hors de votre commune de résidence. L'option la plus économique doit toujours être retenue.",
+      "source": "Document — Modalités de remboursement des frais de déplacement et d'hébergement (Formation)"
+    },
+    {
+      "id": "QR020",
+      "categorie": "Rémunération",
+      "sous_categorie": "Remboursement frais de formation",
+      "question": "Quel est le plafond de remboursement des repas lors d'une formation ?",
+      "reponse": "Le plafond d'indemnité de repas est de 8,75 € dans un établissement hospitalier et de 20 € pour les repas extérieurs.",
+      "source": "Document — Modalités de remboursement des frais de déplacement et d'hébergement"
+    },
+    {
+      "id": "QR021",
+      "categorie": "Rémunération",
+      "sous_categorie": "Remboursement frais de formation",
+      "question": "Quel est le plafond de remboursement d'une nuitée lors d'une formation ?",
+      "reponse": "Le plafond nuit + petit-déjeuner est de 90 € dans les villes de moins de 200 000 habitants, 120 € dans les grandes villes ou communes du Grand Paris (plus de 200 000 habitants) et 140 € à Paris.",
+      "source": "Document — Modalités de remboursement des frais de déplacement et d'hébergement"
+    },
+    {
+      "id": "QR022",
+      "categorie": "Rémunération",
+      "sous_categorie": "Droits contractuels — maladie",
+      "question": "Quels sont les droits à maintien de traitement pour un agent contractuel en congé maladie ordinaire ?",
+      "reponse": "Les droits dépendent de l'ancienneté : moins de 4 mois de services : aucun droit. Après 4 mois : 1 mois à 90 % + 1 mois à demi-traitement. Après 2 ans : 2 mois à 90 % + 2 mois à demi-traitement. Après 3 ans : 3 mois à 90 % + 3 mois à demi-traitement. Ces droits s'apprécient par période de 12 mois et dans la limite de la durée du contrat. Le CHU ne pratique pas la subrogation.",
+      "source": "Document interne — Droits à maintien de traitement agents contractuels"
+    },
+    {
+      "id": "QR023",
+      "categorie": "Rémunération",
+      "sous_categorie": "Droits contractuels — accident",
+      "question": "Un agent contractuel victime d'un accident de service a-t-il droit au maintien de traitement ?",
+      "reponse": "Oui. En cas d'accident de service, de trajet ou de maladie professionnelle, les droits à congé à plein traitement sont : 1 mois dès l'entrée en fonction, 2 mois après un an de services, 3 mois après 3 ans de services.",
+      "source": "Document interne — Droits à maintien de traitement agents contractuels"
+    },
+    {
+      "id": "QR024",
+      "categorie": "Rémunération",
+      "sous_categorie": "Congé maladie ordinaire — règle des 90 %",
+      "question": "Qu'est-ce que la règle du maintien de traitement à 90 % pendant le congé de maladie ordinaire ?",
+      "reponse": "Depuis le 1er mars 2025, pour les personnels non médicaux (contractuels, stagiaires, titulaires), le traitement est maintenu à 90 % pendant les 3 premiers mois du congé de maladie ordinaire, après application d'une journée de carence. Auparavant, le traitement était maintenu à 100 %. Les arrêts pour accident de service, maladie professionnelle, congé longue maladie et longue durée ne sont pas concernés.",
+      "source": "NI 2025/18 — Maintien de traitement à 90 % pendant le CMO"
+    },
+    {
+      "id": "QR025",
+      "categorie": "Congés et absences",
+      "sous_categorie": "Congés annuels / RTT",
+      "question": "Combien de jours de congés annuels et de RTT ai-je par an si je travaille à temps plein ?",
+      "reponse": "À temps plein, vous bénéficiez de 28 congés annuels par an. Si vous travaillez 37h30 par semaine, vous avez 15 RTT (dont 1 pour la journée de solidarité). Si vous êtes au forfait cadre, vous avez 20 RTT (dont 1 pour la journée de solidarité).",
+      "source": "FAQ agents-chu-angers.fr — section Mon temps de travail"
+    },
+    {
+      "id": "QR026",
+      "categorie": "Congés et absences",
+      "sous_categorie": "Compte épargne-temps (CET)",
+      "question": "Comment débloquer des jours de mon compte épargne-temps (CET) ?",
+      "reponse": "Vous devez remplir le formulaire de demande d'utilisation de jours de CET et le faire valider par votre cadre de proximité. Envoyez ensuite le formulaire complété au pôle Politique Sociale à l'adresse DRH-CET@chu-angers.fr. Attention : les jours de CET ne peuvent être pris qu'après avoir utilisé la totalité de vos jours de congés annuels (CA) et de RTT.",
+      "source": "FAQ agents-chu-angers.fr + formulaire CET"
+    },
+    {
+      "id": "QR027",
+      "categorie": "Congés et absences",
+      "sous_categorie": "Compte épargne-temps (CET)",
+      "question": "Y a-t-il une condition de durée minimale d'épargne pour utiliser les jours du CET ?",
+      "reponse": "Non. Il n'y a pas de condition de durée minimum d'épargne ni de nombre minimum de jours épargnés pour utiliser les jours du CET.",
+      "source": "Formulaire CET — conditions d'utilisation"
+    },
+    {
+      "id": "QR028",
+      "categorie": "Congés et absences",
+      "sous_categorie": "Congé maternité / paternité",
+      "question": "Comment déclarer ma grossesse et bénéficier des heures de grossesse ?",
+      "reponse": "Transmettez au service de la Gestion du Temps de Travail (par courrier ou mail à DRH-GestionDuTempsDeTravail@chu-angers.fr) : une déclaration de grossesse datée et tamponnée par un professionnel de santé, et le formulaire d'heure de grossesse complété et signé par votre cadre de proximité, ainsi que votre calendrier de maternité reçu sur votre compte AMELI. Le bureau de la GTT vous transmettra ensuite vos dates de congés maternité.",
+      "source": "FAQ agents-chu-angers.fr — section Mon temps de travail"
+    },
+    {
+      "id": "QR029",
+      "categorie": "Congés et absences",
+      "sous_categorie": "Congé maternité / paternité",
+      "question": "Comment bénéficier d'un congé paternité ?",
+      "reponse": "Adressez une demande écrite au service de la Gestion du Temps de Travail au moins un mois avant votre date souhaitée, avec un justificatif de grossesse. Vous bénéficiez de 3 jours de congé de naissance à poser obligatoirement à la suite de la naissance, puis de 25 jours calendaires dont 4 jours doivent être posés immédiatement à la suite du congé de naissance.",
+      "source": "FAQ agents-chu-angers.fr — section Mon temps de travail"
+    },
+    {
+      "id": "QR030",
+      "categorie": "Congés et absences",
+      "sous_categorie": "Congé mariage / PACS",
+      "question": "Combien de jours de congé ai-je pour mon mariage ou mon PACS ?",
+      "reponse": "Vous bénéficiez de 5 jours à poser aux alentours de la date du mariage ou du PACS, sous réserve de l'accord de votre encadrement. Ces jours ne peuvent pas être positionnés sur une période de congés annuels. Transmettez le formulaire d'autorisation d'absence signé par votre encadrement, accompagné de l'acte de mariage ou de l'attestation de PACS, au service de la GTT.",
+      "source": "FAQ agents-chu-angers.fr — section Mon temps de travail"
+    },
+    {
+      "id": "QR031",
+      "categorie": "Congés et absences",
+      "sous_categorie": "Congé parental",
+      "question": "Comment bénéficier d'un congé parental ?",
+      "reponse": "Remplissez le formulaire de demande de congé parental et transmettez-le par mail à Carrieres@chu-angers.fr. La demande doit être formulée au moins deux mois avant le début du congé. Le congé est accordé par périodes reconductibles de deux à six mois. Le service des carrières vous répond dans un délai de deux mois.",
+      "source": "FAQ agents-chu-angers.fr — section Mon avancement de carrière"
+    },
+    {
+      "id": "QR032",
+      "categorie": "Congés et absences",
+      "sous_categorie": "Congé parental",
+      "question": "Je souhaite réintégrer le CHU à la fin de mon congé parental. Comment procéder ?",
+      "reponse": "Transmettez votre demande de réintégration au bureau du recrutement au moins deux mois avant la date de réintégration souhaitée. Vous serez ensuite recontacté(e) pour évoquer les possibilités d'affectation dans votre grade.",
+      "source": "FAQ agents-chu-angers.fr — section Mon avancement de carrière"
+    },
+    {
+      "id": "QR033",
+      "categorie": "Congés et absences",
+      "sous_categorie": "Congés bonifiés",
+      "question": "Comment faire une demande de congés bonifiés ?",
+      "reponse": "Remplissez le formulaire de demande de congés bonifiés (disponible sur agents-chu-angers.fr). Il doit comporter vos informations personnelles, les dates de voyage, la destination dans les DOM (Guadeloupe, Martinique, Guyane, La Réunion, Mayotte, Saint-Martin, Saint-Pierre-et-Miquelon, Saint-Barthélemy) et les justificatifs de vos centres d'intérêts moraux et matériels (lieu de naissance, résidence des parents, biens fonciers, etc.). Un avis de votre encadrement est requis.",
+      "source": "Formulaire de demande de congés bonifiés"
+    },
+    {
+      "id": "QR034",
+      "categorie": "Congés et absences",
+      "sous_categorie": "Astreintes",
+      "question": "Mon trajet domicile-CHU dépasse 30 minutes. Puis-je obtenir un forfait de trajet supérieur lors de mes astreintes ?",
+      "reponse": "Oui. Le forfait standard est de 30 minutes aller + 30 minutes retour. Si votre trajet est plus long, remplissez le formulaire de demande de forfait temps de trajet supérieur à 30 minutes (disponible sur agents-chu-angers.fr) et retournez-le au bureau de la Gestion du Temps de Travail. Le forfait sera calculé sur la base des applications de calcul d'itinéraires disponibles sur Internet.",
+      "source": "Formulaire astreintes / temps de trajet + FAQ agents-chu-angers.fr"
+    },
+    {
+      "id": "QR035",
+      "categorie": "Congés et absences",
+      "sous_categorie": "Arrêt maladie",
+      "question": "Je suis en arrêt de travail. Que dois-je faire ?",
+      "reponse": "Si vous êtes titulaire ou stagiaire : transmettez le volet n°2 de votre arrêt de travail au Pôle Politique Sociale dans les 48 heures à l'adresse ArretdeTravail@chu-angers.fr. Pendant les trois premiers mois, vous percevez 90 % de votre salaire (depuis le 1er mars 2025, après application d'une journée de carence). Si vous êtes contractuel : adressez la copie du volet 2 à ArretdeTravail@chu-angers.fr et les volets 1 et 2 à la CPAM.",
+      "source": "FAQ agents-chu-angers.fr + NI 2025/18"
+    },
+    {
+      "id": "QR036",
+      "categorie": "Congés et absences",
+      "sous_categorie": "Congé longue maladie (CLM)",
+      "question": "Quels sont mes droits à rémunération en congé longue maladie (CLM) ?",
+      "reponse": "En congé longue maladie, vous percevez l'intégralité de votre traitement pendant un an, puis la moitié de votre traitement les deux années suivantes. Le CGOS verse un complément de 50 % pendant cinq mois les 2e et 3e années (les sept autres mois, vous ne percevez que 50 % de votre salaire).",
+      "source": "FAQ agents-chu-angers.fr — section Ma protection, ma santé"
+    },
+    {
+      "id": "QR037",
+      "categorie": "Congés et absences",
+      "sous_categorie": "Congé longue durée (CLD)",
+      "question": "Quels sont mes droits à rémunération en congé longue durée (CLD) ?",
+      "reponse": "En congé longue durée, vous percevez l'intégralité de votre traitement pendant 3 ans (y compris l'année de CLM), puis la moitié de votre traitement les 2 années suivantes. Le CGOS verse un complément de 50 % pendant cinq mois les 4e et 5e années.",
+      "source": "FAQ agents-chu-angers.fr — section Ma protection, ma santé"
+    },
+    {
+      "id": "QR038",
+      "categorie": "Congés et absences",
+      "sous_categorie": "Congé longue durée (CLD)",
+      "question": "Dans quels cas peut-on bénéficier d'un congé longue durée ?",
+      "reponse": "Le congé longue durée est accordé après un an en congé longue maladie, uniquement si vous êtes atteint d'une des maladies suivantes : tuberculose, maladie mentale, affection cancéreuse, poliomyélite ou déficit immunitaire grave et acquis.",
+      "source": "FAQ agents-chu-angers.fr — section Ma protection, ma santé"
+    },
+    {
+      "id": "QR039",
+      "categorie": "Congés et absences",
+      "sous_categorie": "Temps partiel thérapeutique",
+      "question": "Comment demander un temps partiel thérapeutique (TPT) ?",
+      "reponse": "Récupérez le formulaire de demande de TPT sur agents-chu-angers.fr. Remplissez la première partie, puis faites compléter et valider le formulaire par votre médecin traitant. Retournez-le ensuite au service de la protection sociale (protectionsociale@chu-angers.fr) et prenez rendez-vous à la médecine du travail pour validation. Le TPT ne peut pas être inférieur à 50 % du temps de travail.",
+      "source": "FAQ agents-chu-angers.fr + formulaire demande de TPT"
+    },
+    {
+      "id": "QR040",
+      "categorie": "Accidents et maladies professionnelles",
+      "sous_categorie": "Accident de service / trajet",
+      "question": "Comment déclarer un accident de service ou un accident de trajet ?",
+      "reponse": "Remplissez le formulaire de déclaration d'accident de service/trajet le jour de l'accident, en précisant les circonstances détaillées et les conséquences médicales. Faites-le suivre au service de la Protection Sociale à la DRH (protectionsociale@chu-angers.fr) dans les 48 heures pour validation.",
+      "source": "FAQ agents-chu-angers.fr + formulaire déclaration d'accident"
+    },
+    {
+      "id": "QR041",
+      "categorie": "Accidents et maladies professionnelles",
+      "sous_categorie": "Maladie professionnelle",
+      "question": "Comment déclarer une maladie professionnelle ?",
+      "reponse": "Formulez une demande écrite de déclaration de maladie professionnelle adressée au service de la protection sociale (protectionsociale@chu-angers.fr), accompagnée d'un certificat médical de maladie professionnelle. Vous serez ensuite convoqué(e) au service de la protection sociale pour le traitement de votre dossier.",
+      "source": "FAQ agents-chu-angers.fr — section Ma protection, ma santé"
+    },
+    {
+      "id": "QR042",
+      "categorie": "Formation",
+      "sous_categorie": "Plan de formation",
+      "question": "Comment s'inscrire à une formation inscrite au plan de formation du CHU ?",
+      "reponse": "Rapprochez-vous de votre encadrement de proximité, qui se chargera d'effectuer votre inscription en ligne sur l'outil GESFORM. Vous pouvez formuler votre demande tout au long de l'année.",
+      "source": "FAQ agents-chu-angers.fr — section Ma formation"
+    },
+    {
+      "id": "QR043",
+      "categorie": "Formation",
+      "sous_categorie": "Formation externe",
+      "question": "Comment demander une formation externe au CHU ?",
+      "reponse": "Remplissez le formulaire de demande de formation individuelle hors CHU et faites-le valider par votre encadrement puis par votre encadrement supérieur ou directeur de pôle. Retournez ce formulaire au service de formation continue en respectant le calendrier de recensement des besoins (mars-juin). Votre demande sera examinée en commission de formation, qui vous communique sa décision.",
+      "source": "FAQ agents-chu-angers.fr + formulaire formation individuelle"
+    },
+    {
+      "id": "QR044",
+      "categorie": "Formation",
+      "sous_categorie": "Formation interne",
+      "question": "Comment demander une formation individuelle intra-CHU ?",
+      "reponse": "Remplissez le formulaire de demande de formation individuelle intra-CHU (disponible sur agents-chu-angers.fr) et faites-le valider par votre encadrement. Retournez-le ensuite au service de formation continue (Formation-Continue@chu-angers.fr — tél. 02.41.35.49.00).",
+      "source": "FAQ agents-chu-angers.fr + formulaire formation intra-CHU"
+    },
+    {
+      "id": "QR045",
+      "categorie": "Formation",
+      "sous_categorie": "Formation universitaire",
+      "question": "Comment faire une demande de formation universitaire ?",
+      "reponse": "Remplissez le formulaire « Enseignement Universitaire » et faites-le valider par votre encadrement et votre directeur de pôle. Retournez-le au service de formation continue lors du recensement des besoins (mars-mai). Effectuez également votre pré-inscription auprès de l'établissement scolaire et joignez le programme pédagogique.",
+      "source": "FAQ agents-chu-angers.fr — section Ma formation"
+    },
+    {
+      "id": "QR046",
+      "categorie": "Formation",
+      "sous_categorie": "Congrès",
+      "question": "Comment participer à un congrès ?",
+      "reponse": "Remplissez le formulaire de demande de congrès (disponible sur agents-chu-angers.fr) et faites-le valider par votre responsable hiérarchique, qui le transmettra ensuite au responsable du pôle pour validation.",
+      "source": "FAQ agents-chu-angers.fr — section Ma formation"
+    },
+    {
+      "id": "QR047",
+      "categorie": "Formation",
+      "sous_categorie": "Stages",
+      "question": "Comment effectuer un stage de découverte ou par comparaison ?",
+      "reponse": "Remplissez le formulaire de demande de stage de découverte ou par comparaison (intra ou hors CHU). Le stage doit être réalisé sur temps de travail et dans une limite de 3 jours. Faites valider le formulaire par votre encadrement et celui du service d'accueil, puis par le cadre supérieur du pôle. Retournez-le au service Formation après signature des responsables.",
+      "source": "Formulaire demande de stage par comparaison"
+    },
+    {
+      "id": "QR048",
+      "categorie": "Formation",
+      "sous_categorie": "Reconversion professionnelle",
+      "question": "Je souhaite me reconvertir professionnellement. Qui contacter ?",
+      "reponse": "Contactez le service de la formation continue à Formation-continue@chu-angers.fr pour initier votre projet. Plusieurs dispositifs peuvent être envisagés : congé de formation professionnelle (CFP), compte personnel de formation (CPF), ou accompagnement individualisé selon votre situation.",
+      "source": "FAQ agents-chu-angers.fr — section Ma formation"
+    },
+    {
+      "id": "QR049",
+      "categorie": "Formation",
+      "sous_categorie": "Promotion professionnelle",
+      "question": "Comment bénéficier du dispositif de promotion professionnelle (études promotionnelles) ?",
+      "reponse": "Sollicitez votre encadrement de proximité, qui évaluerait votre projet et émettra un avis argumenté à l'encadrement supérieur du pôle avant une validation de la coordination générale des soins.",
+      "source": "FAQ agents-chu-angers.fr — section Ma formation"
+    },
+    {
+      "id": "QR050",
+      "categorie": "Formation",
+      "sous_categorie": "Études promotionnelles — régime indemnitaire",
+      "question": "Quelles indemnités sont maintenues ou suspendues pendant les études promotionnelles ?",
+      "reponse": "Sont maintenus : le traitement de base, les indemnités à caractère familial (Supplément Familial de Traitement), l'indemnité de sujétion spéciale (prime des 13 heures) ou l'indemnité spécifique. Sont suspendues dès le 1er jour : les indemnités liées aux conditions de travail (dimanche, jours fériés, nuit, travaux dangereux/incommodes/insalubres). Si la formation dépasse en moyenne une journée par semaine sur 12 mois, d'autres primes (prime de service, prime de sujétion des aides-soignants, prime forfaitaire) sont également suspendues. Exception : lors de la réintégration estivale des étudiants infirmiers et IBODE, ces indemnités sont versées.",
+      "source": "NI 2025/15 — Études promotionnelles / régime indemnitaire"
+    },
+    {
+      "id": "QR051",
+      "categorie": "Formation",
+      "sous_categorie": "Congé de formation",
+      "question": "Puis-je participer à une formation si je suis en congé maternité, maladie ou accident de travail ?",
+      "reponse": "Non. Vous pouvez participer à une formation uniquement lorsque vous êtes en position d'activité. Un congé maternité, une maladie ou un accident de travail ne vous permet pas de participer à des actions de formation.",
+      "source": "FAQ agents-chu-angers.fr — section Ma formation"
+    },
+    {
+      "id": "QR052",
+      "categorie": "Carrière",
+      "sous_categorie": "Mobilité interne / changement de service",
+      "question": "Comment changer de service au CHU ?",
+      "reponse": "Adressez une demande de changement de service au service de la gestion des effectifs, en précisant vos motivations, les services souhaités et la quotité de temps de travail envisagée.",
+      "source": "FAQ agents-chu-angers.fr — section Mon avancement de carrière"
+    },
+    {
+      "id": "QR053",
+      "categorie": "Carrière",
+      "sous_categorie": "Mutation vers un autre établissement",
+      "question": "Comment bénéficier d'une mutation vers un autre établissement public ?",
+      "reponse": "Informez par écrit le bureau des carrières (Carrieres@chu-angers.fr). La mutation sera possible dès que votre nouvel établissement aura instruit la demande : délai de 2 mois pour un suivi de conjoint, 3 mois pour tout autre motif.",
+      "source": "FAQ agents-chu-angers.fr — section Mon avancement de carrière"
+    },
+    {
+      "id": "QR054",
+      "categorie": "Carrière",
+      "sous_categorie": "Disponibilité",
+      "question": "Comment faire une demande de mise en disponibilité ?",
+      "reponse": "Remplissez le formulaire de demande de mise en disponibilité et transmettez-le par mail à Carrieres@chu-angers.fr. Le service des carrières traite votre demande et vous répond dans un délai de deux mois.",
+      "source": "FAQ agents-chu-angers.fr — section Mon avancement de carrière"
+    },
+    {
+      "id": "QR055",
+      "categorie": "Carrière",
+      "sous_categorie": "Temps partiel titulaires",
+      "question": "Je suis titulaire et je veux réduire mon temps de travail. Comment faire ?",
+      "reponse": "Remplissez le formulaire de demande de temps partiel et transmettez-le à Carrieres@chu-angers.fr. La demande est traitée au sein du pôle politique social et avec l'encadrement supérieur de votre pôle. Si le temps partiel est possible dans votre service, vous recevez une décision de validation. Dans le cas contraire, une proposition de poste à une quotité correspondant à votre demande vous sera faite.",
+      "source": "FAQ agents-chu-angers.fr — section Mon avancement de carrière"
+    },
+    {
+      "id": "QR056",
+      "categorie": "Carrière",
+      "sous_categorie": "Temps partiel contractuels",
+      "question": "Je suis contractuel et je souhaite modifier ma quotité de temps de travail. Que faire ?",
+      "reponse": "Formulez votre demande par écrit à Contractuel-Chomage@chu-angers.fr. Elle sera traitée au sein du pôle politique social et une proposition de poste correspondant à votre souhait vous sera transmise.",
+      "source": "FAQ agents-chu-angers.fr — section Mon avancement de carrière"
+    },
+    {
+      "id": "QR057",
+      "categorie": "Carrière",
+      "sous_categorie": "Avancement d'échelon",
+      "question": "Comment sont déterminés mes avancements d'échelon ?",
+      "reponse": "La durée nécessaire à un changement d'échelon est fixée par la grille de rémunération de votre grade, selon une durée moyenne déterminée en fonction de votre ancienneté et de vos notations.",
+      "source": "FAQ agents-chu-angers.fr — section Mon avancement de carrière"
+    },
+    {
+      "id": "QR058",
+      "categorie": "Carrière",
+      "sous_categorie": "Avancement de grade",
+      "question": "Comment fonctionnent les avancements de grade ?",
+      "reponse": "Les avancements de grade sont déterminés selon les modalités prévues par les lignes directrices de gestion. Ils peuvent être accordés par inscription sur un tableau d'avancement, par voie de concours ou par examen professionnel.",
+      "source": "FAQ agents-chu-angers.fr — section Mon avancement de carrière"
+    },
+    {
+      "id": "QR059",
+      "categorie": "Carrière",
+      "sous_categorie": "Concours",
+      "question": "Où consulter les avis de concours publiés au CHU ?",
+      "reponse": "Les avis de concours sont publiés sur le site du CHU d'Angers : https://www.chu-angers.fr/le-chu-angers/chu-employeur/offres-et-concours-recrutement-et-carriere/",
+      "source": "FAQ agents-chu-angers.fr — section Mon avancement de carrière"
+    },
+    {
+      "id": "QR060",
+      "categorie": "Carrière",
+      "sous_categorie": "Cumul d'activités",
+      "question": "Comment demander un cumul d'activités ?",
+      "reponse": "Formulez votre demande au bureau des carrières via le formulaire de demande de cumul d'activité à titre accessoire ou le formulaire de cumul dans le cadre d'une création d'entreprise. Transmettez le formulaire complété par mail à Carrieres@chu-angers.fr. Vous recevrez une réponse écrite.",
+      "source": "FAQ agents-chu-angers.fr — section Mon avancement de carrière"
+    },
+    {
+      "id": "QR061",
+      "categorie": "Carrière",
+      "sous_categorie": "Contrats — démission",
+      "question": "Je suis contractuel et je souhaite démissionner. Quelle est la procédure et quel est le préavis ?",
+      "reponse": "Prévenez le service des contractuels par courrier en accusé de réception. Le préavis court à compter de la réception de votre courrier : 8 jours si vous avez moins de 6 mois d'ancienneté, 1 mois entre 6 mois et 2 ans d'ancienneté, 2 mois au-delà de 2 ans d'ancienneté.",
+      "source": "FAQ agents-chu-angers.fr — section Mon avancement de carrière"
+    },
+    {
+      "id": "QR062",
+      "categorie": "Carrière",
+      "sous_categorie": "Fin de contrat",
+      "question": "Je suis contractuel. Comment suis-je informé des suites de mon contrat ?",
+      "reponse": "Le bureau des contractuels vous transmet par courrier les éléments de décision : soit un avenant de prolongation de contrat à retourner signé, soit une décision de fin de contrat indiquant l'éventuelle ouverture de vos droits à l'assurance chômage.",
+      "source": "FAQ agents-chu-angers.fr — section Mon avancement de carrière"
+    },
+    {
+      "id": "QR063",
+      "categorie": "Entretien professionnel",
+      "sous_categorie": "Généralités",
+      "question": "Qu'est-ce que l'entretien professionnel ?",
+      "reponse": "L'entretien professionnel est un moment d'échanges entre vous et votre supérieur hiérarchique direct, régi par le décret n° 2020-719 du 12 juin 2020. Il permet de faire le bilan des actions menées pendant l'année, de fixer les objectifs pour l'année à venir, et de vous exprimer sur vos fonctions et vos souhaits d'évolution.",
+      "source": "FAQ agents-chu-angers.fr — section Campagne d'évaluation professionnelle"
+    },
+    {
+      "id": "QR064",
+      "categorie": "Entretien professionnel",
+      "sous_categorie": "Éligibilité",
+      "question": "Suis-je concerné par l'entretien professionnel ?",
+      "reponse": "Oui si vous êtes titulaire, en CDI, ou en CDD avec plus d'un an d'ancienneté. Les agents stagiaires bénéficient d'une évaluation en cours de stage. Les agents en CDD de moins d'un an font l'objet d'une évaluation au moment de leur renouvellement. Les contractuels ne bénéficient pas d'entretien professionnel mais d'un entretien d'évaluation lors des renouvellements.",
+      "source": "FAQ agents-chu-angers.fr — section Campagne d'évaluation professionnelle"
+    },
+    {
+      "id": "QR065",
+      "categorie": "Entretien professionnel",
+      "sous_categorie": "Procédure",
+      "question": "Combien de temps à l'avance dois-je être informé de la date de mon entretien professionnel ?",
+      "reponse": "L'évaluateur doit vous informer au moins 8 jours avant l'entretien. La convocation est accompagnée de votre fiche de poste/métier, d'un exemplaire du compte-rendu et, le cas échéant, du compte-rendu de l'entretien précédent.",
+      "source": "FAQ agents-chu-angers.fr — section Campagne d'évaluation professionnelle"
+    },
+    {
+      "id": "QR066",
+      "categorie": "Entretien professionnel",
+      "sous_categorie": "Désaccord",
+      "question": "Je suis en désaccord avec les conclusions de mon entretien professionnel. Que puis-je faire ?",
+      "reponse": "Vous disposez de 15 jours francs à compter de la notification du compte rendu pour demander une révision auprès de l'autorité investie du pouvoir de nomination, qui répond dans les 15 jours. En cas de désaccord persistant, vous pouvez saisir la commission administrative paritaire dans un délai d'un mois. Vous pouvez également contester le compte rendu devant le tribunal administratif.",
+      "source": "FAQ agents-chu-angers.fr — section Campagne d'évaluation professionnelle"
+    },
+    {
+      "id": "QR067",
+      "categorie": "Protection sociale",
+      "sous_categorie": "Handicap",
+      "question": "Comment constituer un dossier de reconnaissance en qualité de travailleur handicapé (RQTH) ?",
+      "reponse": "Connectez-vous sur le site de la Maison Départementale de l'Autonomie du Maine-et-Loire (mda.maine-et-loire.fr) et remplissez le dossier unique de demande avec le certificat médical de votre médecin traitant. En cas de difficultés, vous pouvez vous rapprocher de l'assistante sociale du personnel (02.41.35.32.62) ou du médecin du travail, qui dispose de formulaires spécifiques pour une procédure accélérée.",
+      "source": "FAQ agents-chu-angers.fr — section Ma protection, ma santé"
+    },
+    {
+      "id": "QR068",
+      "categorie": "Protection sociale",
+      "sous_categorie": "Soutien psychosocial",
+      "question": "Je traverses une situation difficile (difficultés financières, souffrance au travail). Qui puis-je contacter ?",
+      "reponse": "Vous pouvez contacter Madame Joséphine HAAS, assistante sociale du personnel, au 02.41.35.32.62 (johaas@chu-angers.fr), pour les difficultés financières, les problèmes de santé ou la souffrance au travail. Pour les situations de violence ou de souffrance au travail, vous pouvez également contacter Madame Isabelle BONNEAU, psychologue du travail, au 02.41.35.59.05 (isbonneau@chu-angers.fr).",
+      "source": "FAQ agents-chu-angers.fr — section Ma protection, ma santé + numéros utiles"
+    },
+    {
+      "id": "QR069",
+      "categorie": "Protection sociale",
+      "sous_categorie": "Ergonomie",
+      "question": "Comment bénéficier d'un aménagement de mon poste de travail ?",
+      "reponse": "Sollicitez votre encadrement ou la médecine du travail afin qu'ils renseignent le formulaire de demande d'intervention en ergonomie. Faites-le ensuite parvenir à l'ergonome (isjuret@chu-angers.fr), au secrétariat du Service Santé au Travail (SST-Secrétariat@chu-angers.fr) et au secrétariat de la Cellule Maintien en emploi.",
+      "source": "FAQ agents-chu-angers.fr — section Ma protection, ma santé"
+    },
+    {
+      "id": "QR070",
+      "categorie": "Temps de travail",
+      "sous_categorie": "Ordre de mission",
+      "question": "Comment obtenir un ordre de mission avec frais ?",
+      "reponse": "Sollicitez votre encadrement. Il renseigne le formulaire d'ordre de mission avec frais et le retourne au bureau de la Gestion du Temps de Travail avec les justificatifs demandés.",
+      "source": "FAQ agents-chu-angers.fr — section Mon temps de travail"
+    },
+    {
+      "id": "QR071",
+      "categorie": "Temps de travail",
+      "sous_categorie": "Ordre de mission",
+      "question": "Comment obtenir un ordre de mission sans frais ?",
+      "reponse": "Sollicitez votre encadrement. Il renseigne le formulaire d'ordre de mission sans frais et le retourne au bureau de la Gestion du Temps de Travail avec les justificatifs demandés.",
+      "source": "FAQ agents-chu-angers.fr — section Mon temps de travail"
+    },
+    {
+      "id": "QR072",
+      "categorie": "Temps de travail",
+      "sous_categorie": "Compteurs et suivi",
+      "question": "Comment connaître mes jours travaillés dans l'année en cours ?",
+      "reponse": "Prenez contact avec votre encadrement de proximité, qui peut vous communiquer votre compteur de jours effectués dans l'année en cours (compteur 19 Gestor).",
+      "source": "FAQ agents-chu-angers.fr — section Mon temps de travail"
+    },
+    {
+      "id": "QR073",
+      "categorie": "Contacts utiles",
+      "sous_categorie": "Carrières",
+      "question": "Quel est l'email du service des Carrières (titulaires/stagiaires) ?",
+      "reponse": "L'adresse mail du service des carrières est Carrieres@chu-angers.fr. Les numéros de téléphone sont 02 41 35 45 96, 02 41 35 43 31 et 02 41 35 45 84.",
+      "source": "FAQ agents-chu-angers.fr — Numéros utiles"
+    },
+    {
+      "id": "QR074",
+      "categorie": "Contacts utiles",
+      "sous_categorie": "Formation",
+      "question": "Quel est le contact du service de formation continue ?",
+      "reponse": "Mail : Formation-Continue@chu-angers.fr — Téléphone : 02 41 35 49 00. Le service gère : le plan de formation, la commission de formation, les bilans de compétences, la promotion professionnelle, les stages et les remboursements de frais de formation.",
+      "source": "FAQ agents-chu-angers.fr — Numéros utiles"
+    },
+    {
+      "id": "QR075",
+      "categorie": "Contacts utiles",
+      "sous_categorie": "Protection sociale",
+      "question": "Quel est le contact du service de la protection sociale ?",
+      "reponse": "Mail : protectionsociale@chu-angers.fr et ArretdeTravail@chu-angers.fr — Téléphones : 02 41 35 43 36 / 02 41 35 77 31 / 02 41 35 39 04. Ce service gère : accidents du travail, maladies professionnelles, CLM, CLD, temps partiel thérapeutique, CGOS, crèches et arrêts de travail.",
+      "source": "FAQ agents-chu-angers.fr — Numéros utiles"
+    },
+    {
+      "id": "QR076",
+      "categorie": "Contacts utiles",
+      "sous_categorie": "Rémunérations",
+      "question": "Quel est le contact du service des rémunérations pour le personnel non médical ?",
+      "reponse": "Mail : Paie-non-medicale@chu-angers.fr — Téléphones : 02 41 35 43 51 / 02 41 35 43 50 / 02 41 35 50 81. Ce service gère la rémunération du personnel non médical, les bulletins de salaire, le supplément familial, les remboursements de frais de transport et les heures supplémentaires.",
+      "source": "FAQ agents-chu-angers.fr — Numéros utiles"
+    },
+    {
+      "id": "QR077",
+      "categorie": "Contacts utiles",
+      "sous_categorie": "Gestion du temps de travail",
+      "question": "Quel est le contact du bureau de la Gestion du Temps de Travail (GTT) ?",
+      "reponse": "Mail : DRH-GestionDuTempsDeTravail@chu-angers.fr — Téléphones : 02 41 35 59 93 / 02 41 35 35 56 / 02 41 35 38 62. Le bureau gère : l'absentéisme, les congés annuels, les autorisations d'absence, les ordres de mission, les congés maternité, les heures de grossesse.",
+      "source": "FAQ agents-chu-angers.fr — Numéros utiles"
+    },
+    {
+      "id": "QR078",
+      "categorie": "Contacts utiles",
+      "sous_categorie": "Compte épargne-temps",
+      "question": "Quel est le contact pour le compte épargne-temps (CET) ?",
+      "reponse": "Mail : DRH-CET@chu-angers.fr — Téléphone : 02 41 35 56 60. Ce bureau gère l'ouverture et le déblocage des jours de CET.",
+      "source": "FAQ agents-chu-angers.fr — Numéros utiles"
+    },
+    {
+      "id": "QR079",
+      "categorie": "Contacts utiles",
+      "sous_categorie": "Recrutement / concours",
+      "question": "Quel est le contact du service Recrutement / gestion des concours ?",
+      "reponse": "Mail : Recrutement@chu-angers.fr. Selon votre pôle, les numéros varient : 02 41 35 43 37 (pôles FME et spécialités médico-chirurgicales), 02 41 35 30 10 (SISPO et biologie), 02 41 35 43 38 (concours), 02 41 35 43 39 (pilotage, patient-attractivité, politique sociale…), etc.",
+      "source": "FAQ agents-chu-angers.fr — Numéros utiles"
+    },
+    {
+      "id": "QR080",
+      "categorie": "Contacts utiles",
+      "sous_categorie": "Retour et maintien dans l'emploi",
+      "question": "Quel est le contact pour le Retour et Maintien dans l'Emploi (RME) / handicap ?",
+      "reponse": "Mail : Retouretmaintien@chu-angers.fr — Téléphone : 02 41 35 43 33. Ce service gère l'accompagnement au retour à l'emploi, les reclassements et la commission médico-sociale.",
+      "source": "FAQ agents-chu-angers.fr — Numéros utiles"
+    },
+    {
+      "id": "QR081",
+      "categorie": "Contacts utiles",
+      "sous_categorie": "Contractuels / chômage",
+      "question": "Quel est le contact pour la gestion des contractuels et l'indemnisation chômage ?",
+      "reponse": "Mail : Contractuel-Chomage@chu-angers.fr — Téléphones : 02 41 35 43 32 et 02 41 35 38 27 (selon votre pôle). Ce bureau gère les CDD/CDI, les démissions, l'indemnisation chômage (France Travail) et les feuilles de notation contractuelles.",
+      "source": "FAQ agents-chu-angers.fr — Numéros utiles"
+    },
+    {
+      "id": "QR082",
+      "categorie": "Contacts utiles",
+      "sous_categorie": "Retraites et médailles",
+      "question": "Quel est le contact pour les retraites et les médailles du travail ?",
+      "reponse": "Mail : Carrieres@chu-angers.fr — Téléphone : 02 41 35 48 41. Ce bureau gère les retraites, la cessation progressive d'activité, le capital décès et les médailles du travail.",
+      "source": "FAQ agents-chu-angers.fr — Numéros utiles"
+    },
+    {
+      "id": "QR083",
+      "categorie": "Contacts utiles",
+      "sous_categorie": "Secrétariat DRH",
+      "question": "Quels sont les horaires d'ouverture et le contact du secrétariat du pôle Politique sociale ?",
+      "reponse": "Téléphone : 02 41 35 43 28 / 02 41 35 43 29 — Mail : DRH@chu-angers.fr. Situé : Quartier vert, bâtiment B3 – Direction générale, 1er étage. Horaires : du lundi au vendredi, de 13h à 17h.",
+      "source": "FAQ agents-chu-angers.fr — Numéros utiles"
+    },
+    {
+      "id": "QR084",
+      "categorie": "CGOS et action sociale",
+      "sous_categorie": "CGOS",
+      "question": "Qu'est-ce que le CGOS ?",
+      "reponse": "Le CGOS (Comité de Gestion des Œuvres Sociales) est l'équivalent du comité d'entreprise pour la Fonction Publique Hospitalière (FPH). Il propose des prestations d'action sociale et culturelle aux agents. Plus d'informations sur www.cgos.info.",
+      "source": "Rapport Phase 1 — section 4.4 Protection sociale"
+    },
+    {
+      "id": "QR085",
+      "categorie": "CGOS et action sociale",
+      "sous_categorie": "CGOS",
+      "question": "Où trouver plus d'informations sur les prestations du CGOS ?",
+      "reponse": "Vous pouvez consulter le site du CGOS directement : https://www.cgos.info/ et la page intranet du CHU dédiée : https://www.agents-chu-angers.fr/je-travaille-au-chu/vie-sociale/cgos-action-sociale-et-culturelle/",
+      "source": "Rapport Phase 1 + FAQ agents-chu-angers.fr"
+    },
+    {
+      "id": "QR086",
+      "categorie": "Crèches",
+      "sous_categorie": "Places en crèche",
+      "question": "Comment obtenir une place en crèche pour mon enfant ?",
+      "reponse": "Pour toute demande de place en crèche, contactez le service de la protection sociale (protectionsociale@chu-angers.fr) ou consultez la page intranet dédiée : https://www.agents-chu-angers.fr/je-travaille-au-chu/vie-pratique/creches/",
+      "source": "Rapport Phase 1 + numéros utiles"
+    },
+    {
+      "id": "QR087",
+      "categorie": "Formation",
+      "sous_categorie": "Ressources externes",
+      "question": "Quelles sont les ressources externes pour la formation continue dans la FPH ?",
+      "reponse": "L'ANFH (Association Nationale pour la Formation permanente du personnel Hospitalier) est le principal organisme paritaire collecteur agréé pour la FPH. Vous pouvez consulter son site : https://www.anfh.fr/. La page intranet CHU sur la formation est : https://www.agents-chu-angers.fr/je-travaille-au-chu/ma-carriere/ma-formation/",
+      "source": "Rapport Phase 1 — cartographie documentaire"
+    },
+    {
+      "id": "QR088",
+      "categorie": "Retraite",
+      "sous_categorie": "CNRACL",
+      "question": "Où trouver des informations sur ma retraite en tant qu'agent hospitalier titulaire ?",
+      "reponse": "Les agents titulaires de la Fonction Publique Hospitalière sont affiliés à la CNRACL (Caisse Nationale de Retraites des Agents des Collectivités Locales). Consultez leur site : https://www.cnracl.retraites.fr/. Pour toute question spécifique, contactez le bureau des carrières : Carrieres@chu-angers.fr — tél. 02 41 35 48 41.",
+      "source": "Rapport Phase 1 — section 4.5 + FAQ agents-chu-angers.fr"
+    },
+    {
+      "id": "QR089",
+      "categorie": "Carrière",
+      "sous_categorie": "Formulaires utiles",
+      "question": "Où trouver les formulaires utiles RH du CHU d'Angers ?",
+      "reponse": "L'ensemble des formulaires utiles aux agents est disponible sur la page : https://www.agents-chu-angers.fr/formulaires-utiles/",
+      "source": "Rapport Phase 1 — section 4.5 + cartographie documentaire"
+    },
+    {
+      "id": "QR090",
+      "categorie": "Carrière",
+      "sous_categorie": "Positions statutaires / congés et disponibilités",
+      "question": "Où trouver les informations sur mes congés, absences et disponibilités statutaires ?",
+      "reponse": "Consultez la page intranet dédiée : https://www.agents-chu-angers.fr/je-travaille-au-chu/droits-obligations-et-plus/mes-conges-absences-ou-disponibilites/",
+      "source": "Rapport Phase 1 — section 4.5 + cartographie documentaire"
+    },
+    {
+      "id": "QR091",
+      "categorie": "Carrière",
+      "sous_categorie": "Fin d'activité",
+      "question": "Où trouver des informations sur la fin d'activité (départ à la retraite, cessation d'activité) ?",
+      "reponse": "Consultez la page intranet dédiée : https://www.agents-chu-angers.fr/je-travaille-au-chu/ma-carriere/ma-fin-d-activite/ et contactez le bureau des carrières à Carrieres@chu-angers.fr ou au 02 41 35 48 41.",
+      "source": "Rapport Phase 1 — section 4.5 + cartographie documentaire"
+    },
+    {
+      "id": "QR092",
+      "categorie": "Carrière",
+      "sous_categorie": "Avancement de carrière",
+      "question": "Où consulter les informations sur mon avancement de carrière ?",
+      "reponse": "Consultez la page intranet : https://www.agents-chu-angers.fr/je-travaille-au-chu/ma-carriere/mon-avancement-de-carriere/ ou contactez le bureau des carrières à Carrieres@chu-angers.fr.",
+      "source": "Rapport Phase 1 — cartographie documentaire"
+    },
+    {
+      "id": "QR093",
+      "categorie": "Protection sociale",
+      "sous_categorie": "Accidents et arrêts",
+      "question": "Où trouver les informations sur les arrêts maladie et les accidents de service ?",
+      "reponse": "Consultez la page intranet : https://www.agents-chu-angers.fr/je-travaille-au-chu/ma-protection-ma-sante/les-arrets-et-accidents/ ou contactez le service de la protection sociale : protectionsociale@chu-angers.fr — tél. 02 41 35 43 36.",
+      "source": "Rapport Phase 1 — cartographie documentaire"
+    },
+    {
+      "id": "QR094",
+      "categorie": "Protection sociale",
+      "sous_categorie": "Handicap",
+      "question": "Où trouver les informations sur l'accompagnement handicap au travail au CHU ?",
+      "reponse": "Consultez la page intranet : https://www.agents-chu-angers.fr/je-travaille-au-chu/ma-protection-ma-sante/handicap-au-travail/ ou contactez le service Retour et Maintien dans l'Emploi : Retouretmaintien@chu-angers.fr — tél. 02 41 35 43 33.",
+      "source": "Rapport Phase 1 — cartographie documentaire"
+    },
+    {
+      "id": "QR095",
+      "categorie": "Rémunération",
+      "sous_categorie": "Ma rémunération",
+      "question": "Où trouver les informations générales sur ma rémunération et les FAQ ?",
+      "reponse": "Consultez les pages intranet suivantes : https://www.agents-chu-angers.fr/je-travaille-au-chu/droits-obligations-et-plus/ma-remuneration/ et https://www.agents-chu-angers.fr/faq-numeros-utiles/ (rubrique « ma rémunération »).",
+      "source": "Rapport Phase 1 — cartographie documentaire"
+    },
+    {
+      "id": "QR096",
+      "categorie": "Rémunération",
+      "sous_categorie": "Remboursement frais de formation",
+      "question": "Peut-on utiliser un véhicule personnel pour se rendre à une formation ? Comment est-il remboursé ?",
+      "reponse": "L'utilisation du véhicule personnel n'est possible qu'à titre dérogatoire, lorsque le déplacement ne peut pas se réaliser en transport en commun. Le remboursement se fait sur base kilométrique selon la puissance fiscale du véhicule (ex. : 5 CV et moins : 0,32 €/km jusqu'à 2000 km). Vous devez joindre une photocopie de la carte grise et vérifier que votre contrat d'assurance prévoit l'usage professionnel.",
+      "source": "Document — Modalités de remboursement des frais de déplacement"
+    },
+    {
+      "id": "QR097",
+      "categorie": "Temps de travail",
+      "sous_categorie": "Ordre de mission mensuel",
+      "question": "Comment déclarer mes déplacements entre les 3 sites du CHU ?",
+      "reponse": "Remplissez le formulaire d'ordre de mission mensuel (relevé de déplacements entre les 3 sites), en indiquant votre matricule, les dates, motifs et distances pour chaque déplacement. Le formulaire doit être validé par votre responsable de service ou de pôle. Le remboursement s'effectue sur la base des indemnités kilométriques.",
+      "source": "Formulaire ordre de mission mensuel"
+    },
+    {
+      "id": "QR098",
+      "categorie": "Protection sociale",
+      "sous_categorie": "Congé longue maladie — délai de traitement",
+      "question": "Mon dossier de congé longue maladie est en attente. Quand aurai-je une réponse ?",
+      "reponse": "Les demandes de congé longue maladie sont traitées mensuellement par le conseil médical départemental. Une décision vous sera transmise dès que votre dossier a été étudié.",
+      "source": "FAQ agents-chu-angers.fr — section Ma protection, ma santé"
+    },
+    {
+      "id": "QR099",
+      "categorie": "Rémunération",
+      "sous_categorie": "Bulletin de salaire non reçu",
+      "question": "Je ne reçois plus mon bulletin de salaire car je suis en arrêt ou j'ai quitté mon service. Que faire ?",
+      "reponse": "Les bulletins de salaire sont envoyés dans votre service. Si vous n'y êtes plus présent ou êtes en arrêt prolongé, votre encadrement renvoie vos bulletins au service de la rémunération, qui se charge de vous les expédier à votre domicile par voie postale.",
+      "source": "FAQ agents-chu-angers.fr — section Ma rémunération"
+    },
+    {
+      "id": "QR100",
+      "categorie": "Rémunération",
+      "sous_categorie": "Forfait mobilités durables — vérification",
+      "question": "L'employeur peut-il vérifier ma déclaration pour le forfait mobilités durables ?",
+      "reponse": "Oui. Le texte réglementaire autorise l'employeur à vérifier la véracité de la déclaration sur l'honneur et à demander tout justificatif utile.",
+      "source": "NI 2025/46 — Forfait mobilités durables"
+    },
+    {
+      "id": "QR101",
+      "categorie": "Rémunération",
+      "sous_categorie": "Forfait mobilités durables — mobilité en cours d'année",
+      "question": "J'ai changé d'employeur en cours d'année. Qui verse le forfait mobilités durables ?",
+      "reponse": "Le forfait mobilités durables doit être versé par le dernier employeur de l'agent au 31 décembre, en tenant compte de l'ensemble des déplacements effectués sur l'année.",
+      "source": "NI 2025/46 — Forfait mobilités durables"
+    },
+    {
+      "id": "QR102",
+      "categorie": "Rémunération",
+      "sous_categorie": "Forfait mobilités durables — personnel hospitalo-universitaire",
+      "question": "Je suis un professionnel hospitalo-universitaire (PU-PH, MCU-PH…). Comment dois-je faire ma demande de FMD ?",
+      "reponse": "Vous devez effectuer votre demande à la fois auprès de l'Université et de la Direction des Affaires Médicales. Le versement du forfait sera réparti à 50 % entre les deux employeurs.",
+      "source": "NI 2025/46 — Forfait mobilités durables"
+    },
+    {
+      "id": "QR103",
+      "categorie": "Formation",
+      "sous_categorie": "Délai de route",
+      "question": "Puis-je bénéficier d'un jour de délai de route pour me rendre à une formation éloignée ?",
+      "reponse": "Oui. Un jour de délai de route peut être accordé : soit 1 jour la veille, soit 1 jour le lendemain, soit ½ jour avant et/ou ½ jour après la formation. Ce délai permet de s'absenter pour le trajet mais ne peut pas donner lieu à récupération.",
+      "source": "Document — Modalités de remboursement des frais de déplacement et d'hébergement"
+    },
+    {
+      "id": "QR104",
+      "categorie": "Carrière",
+      "sous_categorie": "Perspectives d'évolution",
+      "question": "Quelles sont mes perspectives d'évolution au CHU d'Angers ?",
+      "reponse": "Le CHU d'Angers propose plusieurs leviers d'évolution : des formations pour développer vos compétences, la mobilité interne avec une équipe dédiée au suivi des effectifs, le dispositif de promotion professionnelle pour se former à un autre métier, et l'organisation de concours.",
+      "source": "FAQ agents-chu-angers.fr — section Mon évolution au CHU"
+    },
+    {
+      "id": "QR105",
+      "categorie": "Rémunération",
+      "sous_categorie": "Paiement CA contrats d'été",
+      "question": "Quand sont payés les congés annuels des agents en contrats d'été ?",
+      "reponse": "Les congés annuels des contrats d'été sont versés comme suit : en septembre pour les contrats se terminant en juillet, en octobre pour les contrats se terminant en août, en novembre pour les contrats se terminant en septembre.",
+      "source": "Document interne — tableau des périodicités de paiement"
+    }
+
+  ]
+}

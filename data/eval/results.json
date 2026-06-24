@@ -1,0 +1,112 @@
+[
+  {
+    "id": "QR001",
+    "categorie": "Rémunération",
+    "question": "Comment accéder à mon coffre-fort numérique pour consulter mes bulletins de salaire dématérialisés ?",
+    "answer": "",
+    "context": "",
+    "ground_truth": "Vous pouvez accéder à votre coffre-fort numérique Digiposte à tout moment depuis un ordinateur, une tablette ou un smartphone (application mobile disponible). Si vous n'avez pas reçu d'invitation par mail, rendez-vous sur https://adherer.digiposte.fr/chu-angers et renseignez votre matricule, votre adresse mail personnelle et un code de sécurité composé des 6 derniers chiffres de votre matricule suivi de votre jour et mois de naissance.",
+    "faithfulness": 0.0,
+    "answer_correctness": 0.0,
+    "context_relevance": 0.0
+  },
+  {
+    "id": "QR002",
+    "categorie": "Rémunération",
+    "question": "Je souhaite conserver mon bulletin de salaire en format papier. Comment faire ?",
+    "answer": "",
+    "context": "",
+    "ground_truth": "Vous pouvez refuser la dématérialisation via l'application « Mes infos agent » sur l'intranet ou par mail à docaposteConsentement@chu-angers.fr si vous n'avez pas accès à l'intranet. Vous recevrez alors vos bulletins de salaire par envoi postal à votre domicile. Vous pouvez également annuler la dématérialisation à tout moment en vous connectant à Digiposte > onglet « Organismes » > sélectionner votre employeur > roue crantée > « Déconnecter l'organisme ».",
+    "faithfulness": 0.0,
+    "answer_correctness": 0.0,
+    "context_relevance": 0.0
+  },
+  {
+    "id": "QR003",
+    "categorie": "Rémunération",
+    "question": "Je quitte le CHU. Vais-je perdre l'accès à mes bulletins de salaire dans mon coffre-fort numérique ?",
+    "answer": "",
+    "context": "",
+    "ground_truth": "Non. Une fois ouvert, le coffre-fort numérique Digiposte est à votre disposition à vie et gratuitement. Vous bénéficierez donc toujours de votre coffre-fort après votre départ du CHU.",
+    "faithfulness": 0.0,
+    "answer_correctness": 0.0,
+    "context_relevance": 0.0
+  },
+  {
+    "id": "QR004",
+    "categorie": "Rémunération",
+    "question": "Mes bulletins de salaire dématérialisés ont-ils la même valeur juridique que les bulletins papier ?",
+    "answer": "",
+    "context": "",
+    "ground_truth": "Oui. Les bulletins de salaire numériques bénéficient de la même valeur juridique que les bulletins au format papier. Ils sont au format PDF et peuvent être enregistrés, transmis ou imprimés.",
+    "faithfulness": 0.0,
+    "answer_correctness": 0.0,
+    "context_relevance": 0.0
+  },
+  {
+    "id": "QR005",
+    "categorie": "Rémunération",
+    "question": "Ni le CHU ni Docaposte peuvent-ils accéder au contenu de mon coffre-fort numérique ?",
+    "answer": "",
+    "context": "",
+    "ground_truth": "Correct. Ni le CHU ni le prestataire Docaposte ne peuvent accéder aux données contenues dans votre coffre-fort numérique. Le CHU a uniquement la possibilité de déposer vos bulletins de salaire chaque mois.",
+    "faithfulness": 0.0,
+    "answer_correctness": 0.0,
+    "context_relevance": 0.0
+  },
+  {
+    "id": "QR006",
+    "categorie": "Rémunération",
+    "question": "Comment informer le service de la paie d'un changement de RIB ?",
+    "answer": "",
+    "context": "",
+    "ground_truth": "Vous devez remplir le formulaire de changement de coordonnées bancaires (disponible sur agents-chu-angers.fr) et le transmettre accompagné de votre RIB en deux exemplaires. Le formulaire doit être signé. Pour le personnel non médical et les sages-femmes : s'adresser à la Direction des Ressources Humaines. Pour le personnel médical, pharmaceutique, biologique et odontologique : s'adresser à la Direction des Affaires Médicales.",
+    "faithfulness": 0.0,
+    "answer_correctness": 0.0,
+    "context_relevance": 0.0
+  },
+  {
+    "id": "QR007",
+    "categorie": "Rémunération",
+    "question": "Comment obtenir le remboursement de mon abonnement de transports en commun (train, tram, bus) ?",
+    "answer": "",
+    "context": "",
+    "ground_truth": "Transmettez un justificatif d'abonnement (facture) au bureau de la paie non-médicale pour le personnel non médical et les sages-femmes, ou à la paie médicale pour le personnel médical, pharmaceutique, biologique et odontologique.",
+    "faithfulness": 0.0,
+    "answer_correctness": 0.0,
+    "context_relevance": 0.0
+  },
+  {
+    "id": "QR008",
+    "categorie": "Rémunération",
+    "question": "Comment bénéficier du forfait mobilités durables (FMD) ?",
+    "answer": "",
+    "context": "",
+    "ground_truth": "Vous devez remplir le formulaire en ligne avant le 31 décembre de l'année concernée, accompagné de vos pièces justificatives. Le formulaire est accessible à l'adresse indiquée dans la NI 2025/46 (via QR code ou lien Sphinx). À compter de 2025, aucune demande papier ou par mail n'est acceptée. Le versement intervient d'ici la fin du 1er semestre de l'année suivante.",
+    "faithfulness": 0.0,
+    "answer_correctness": 0.0,
+    "context_relevance": 0.0
+  },
+  {
+    "id": "QR009",
+    "categorie": "Rémunération",
+    "question": "Quels modes de transport ouvrent droit au forfait mobilités durables ?",
+    "answer": "",
+    "context": "",
+    "ground_truth": "Sont éligibles : le vélo et le vélo à assistance électrique, le covoiturage (conducteur ou passager), les engins de déplacement personnels motorisés non thermiques (trottinettes, gyropodes…) en location ou en libre-service, le service d'auto-partage avec véhicules électriques/hybrides/hydrogène. Ne sont pas éligibles : les scooters personnels, les voitures électriques personnelles et la marche à pied.",
+    "faithfulness": 0.0,
+    "answer_correctness": 0.0,
+    "context_relevance": 0.0
+  },
+  {
+    "id": "QR010",
+    "categorie": "Rémunération",
+    "question": "Quel est le montant du forfait mobilités durables ?",
+    "answer": "",
+    "context": "",
+    "ground_truth": "Le montant annuel est calculé selon le nombre de jours de déplacements domicile-travail réalisés : 100 € entre 30 et 59 jours, 200 € entre 60 et 99 jours, 300 € à partir de 100 jours. Le minimum requis pour être éligible est 30 jours d'utilisation d'un mode de transport alternatif.",
+    "faithfulness": 0.0,
+    "answer_correctness": 0.0,
+    "context_relevance": 0.0
+  }
+]
