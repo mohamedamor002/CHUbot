@@ -44,9 +44,12 @@ build/
 
 # Installeur final (distribué séparément, pas versionné)
 installer/
+installer.zip
 
 # FlashRank model cache
 .cache/
 
-# Alembic generated (garder les scripts, pas les données)
+# Base SQLite locale (fichier + journaux WAL)
 *.db
+*.db-shm
+*.db-wal

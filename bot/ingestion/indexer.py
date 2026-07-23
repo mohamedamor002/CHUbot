@@ -9,6 +9,7 @@ Usage en ligne de commande :
 """
 
 import argparse
+import asyncio
 import hashlib
 import sys
 from functools import lru_cache
@@ -32,6 +33,10 @@ def get_embeddings() -> OllamaEmbeddings:
     return OllamaEmbeddings(
         model=settings.EMBEDDING_MODEL,
         base_url=settings.EMBEDDING_BASE_URL,
+        # trust_env=False : ignore le proxy système/entreprise pour cet appel.
+        # EMBEDDING_BASE_URL est toujours localhost — certains proxys d'entreprise
+        # interceptent même le trafic loopback et renvoient un 407 sans ça.
+        client_kwargs={"trust_env": False},
     )
 
 
@@ -80,6 +85,38 @@ def index_documents(docs: List[Document]) -> int:
     return len(unique_chunks)
 
 
+async def _record_indexed_documents(records: List[tuple]) -> None:
+    """Enregistre les sources indexées en CLI dans la table indexed_documents,
+    pour que le dashboard admin (/api/admin/documents) les reflète aussi."""
+    from bot.api.db.database import AsyncSessionLocal
+    from bot.api.db.models import IndexedDocument
+
+    async with AsyncSessionLocal() as db:
+        for filename, file_type, chunks in records:
+            db.add(IndexedDocument(filename=filename, file_type=file_type, chunks_indexed=chunks))
+        await db.commit()
+
+
+def index_and_record(docs: List[Document]) -> int:
+    """Indexe les documents groupés par source (un appel par fichier/URL) et
+    enregistre chaque source en base — équivalent CLI du flux d'upload admin."""
+    groups: dict[str, List[Document]] = {}
+    for d in docs:
+        key = d.metadata.get("source_file", "inconnu")
+        groups.setdefault(key, []).append(d)
+
+    total = 0
+    records: List[tuple] = []
+    for source, group_docs in groups.items():
+        n = index_documents(group_docs)
+        total += n
+        file_type = group_docs[0].metadata.get("file_type", "?")
+        records.append((source, file_type, n))
+
+    asyncio.run(_record_indexed_documents(records))
+    return total
+
+
 def reset_index() -> None:
     """Vide toute la collection et supprime les fichiers sur disque (réindexation propre)."""
     import shutil
@@ -100,6 +137,20 @@ def reset_index() -> None:
             sys.exit(1)
         index_path.mkdir(parents=True)
     print("  [OK] Index ChromaDB supprimé et répertoire recréé")
+
+    asyncio.run(_clear_indexed_documents())
+    print("  [OK] Table indexed_documents vidée")
+
+
+async def _clear_indexed_documents() -> None:
+    from sqlalchemy import delete
+
+    from bot.api.db.database import AsyncSessionLocal
+    from bot.api.db.models import IndexedDocument
+
+    async with AsyncSessionLocal() as db:
+        await db.execute(delete(IndexedDocument))
+        await db.commit()
 
 
 # ── CLI ───────────────────────────────────────────────────────────────────────
@@ -145,7 +196,7 @@ def _cli():
         sys.exit(0)
 
     print(f"\nIndexation de {len(docs)} document(s)...")
-    total = index_documents(docs)
+    total = index_and_record(docs)
     print(f"\nTerminé — {total} chunks indexés dans ChromaDB (doublons ignorés).")
 
 

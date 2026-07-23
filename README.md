@@ -43,8 +43,8 @@ CHUbot/
 ├── backend_main.py              ← Point d'entrée desktop (PyInstaller + uvicorn)
 ├── data/
 │   ├── documents/               ← Fichiers sources PDF/DOCX/Excel (non versionné)
-│   └── indexes/                 ← Index ChromaDB (non versionné)
-├── alembic/                     ← Migrations PostgreSQL
+│   ├── indexes/                 ← Index ChromaDB (non versionné)
+│   └── chubot.db                ← Base SQLite locale (non versionné)
 ├── .env                         ← Variables d'environnement (non versionné)
 └── requirements.txt
 ```
@@ -74,7 +74,7 @@ Le chatbot couvre les 5 sous-départements identifiés lors des ateliers (avril 
 | Embeddings | Ollama `nomic-embed-text` |
 | Vector Store | ChromaDB (local, persistant) |
 | RAG | LangChain — hybrid BM25 + vectoriel, reranking FlashRank |
-| Base de données | PostgreSQL + SQLAlchemy async |
+| Base de données | SQLite (fichier local) + SQLAlchemy async |
 | Frontend web | React 18, Vite, Tailwind CSS |
 | Desktop | Tauri 2 (Rust + WebView2) |
 
@@ -84,7 +84,6 @@ Le chatbot couvre les 5 sous-départements identifiés lors des ateliers (avril 
 
 - Python 3.11+
 - Node.js 18+
-- PostgreSQL 14+
 - Ollama installé et lancé
 - Rust + Cargo (pour l'app desktop uniquement)
 
@@ -109,17 +108,14 @@ copy .env.example .env
 Modifier `.env` :
 
 ```env
-DATABASE_URL=postgresql+asyncpg://postgres:MOT_DE_PASSE@localhost:5432/chubot
 OLLAMA_MODEL=llama3.1:latest
 OLLAMA_BASE_URL=https://llm.chu-angers.fr/ollama
+ADMIN_API_KEY=<clé aléatoire à générer>
 ```
 
 ### 3. Base de données
 
-```bash
-psql -U postgres -c "CREATE DATABASE chubot;"
-```
-
+Aucune installation requise — SQLite est un fichier local (`data/chubot.db`).
 Les tables sont créées automatiquement au premier démarrage.
 
 ### 4. Modèles Ollama
