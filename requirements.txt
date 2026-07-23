@@ -28,7 +28,7 @@ unstructured[xlsx]>=0.10.0        # requis par UnstructuredExcelLoader
 
 # ── Database ──────────────────────────────────────────────────────────────────
 sqlalchemy[asyncio]>=2.0.0
-alembic>=1.14.0
+aiosqlite>=0.20.0                 # driver SQLite async (fichier local, aucun serveur requis)
 
 # ── Auth & Security ───────────────────────────────────────────────────────────
 python-jose[cryptography]>=3.3.0  # JWT tokens
@@ -54,8 +54,6 @@ pytest>=8.3.0
 pytest-asyncio>=0.25.0
 pytest-cov>=6.0.0
 
-# ── PostgreSQL ────────────────────────────────────────────────────────────────
-asyncpg>=0.30.0                   # PostgreSQL async driver
 # redis>=5.2.0
 # hiredis>=3.0.0
 # celery[redis]>=5.4.0

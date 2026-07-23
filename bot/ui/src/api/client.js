@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BACKEND = 'http://127.0.0.1:8765'
+export const BACKEND = 'http://127.0.0.1:8765'
 
 const api = axios.create({
   baseURL: `${BACKEND}/api/v1`,
@@ -58,4 +58,10 @@ export async function sendMessageStream(question, sessionId = null, onChunk, onD
 
 export async function submitFeedback(messageId, isHelpful, rating = null) {
   await api.post('/feedback', { message_id: messageId, is_helpful: isHelpful, rating })
+}
+
+export async function checkHealth() {
+  const res = await fetch(`${BACKEND}/health`, { signal: AbortSignal.timeout(3000) })
+  if (!res.ok) throw new Error('backend not ready')
+  return res.json()
 }

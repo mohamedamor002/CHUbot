@@ -9,10 +9,13 @@ Utilisé pour :
 import sys
 import os
 
-# Quand PyInstaller emballe l'app, les ressources sont dans sys._MEIPASS
+# Quand PyInstaller emballe l'app, les ressources sont dans sys._MEIPASS.
+# sys.path.insert est explicite : ne pas compter sur l'ajout automatique du
+# bootloader, qui s'est révélé peu fiable selon les builds (bot introuvable).
 if getattr(sys, "frozen", False):
     base_dir = sys._MEIPASS
     os.chdir(base_dir)
+    sys.path.insert(0, base_dir)
 
 import uvicorn
 

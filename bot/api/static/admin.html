@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CHUbot · Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: { DEFAULT: '#1B4F9C', light: '#2563EB', muted: '#EFF6FF' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { -webkit-font-smoothing: antialiased; }
+    .drop-active { border-color: #2563EB !important; background: #EFF6FF; }
+    .fade { animation: fadeIn .15s ease; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(4px) } to { opacity:1; transform:none } }
+    .spin { animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9px; }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen">
+
+<!-- ══ Layout ══════════════════════════════════════════════════════════════ -->
+<div class="flex min-h-screen">
+
+  <!-- Sidebar -->
+  <aside class="w-56 bg-white border-r border-slate-100 flex flex-col fixed top-0 left-0 h-full z-10">
+    <div class="px-5 py-5 border-b border-slate-100">
+      <div class="flex items-center gap-2.5">
+        <div class="w-7 h-7 bg-brand rounded-md flex items-center justify-center text-white text-xs font-bold">C</div>
+        <span class="text-sm font-semibold text-slate-800">CHUbot</span>
+        <span class="ml-auto text-[10px] font-medium text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">admin</span>
+      </div>
+    </div>
+
+    <nav class="flex-1 px-3 py-4 space-y-0.5 text-sm">
+      <a onclick="showSection('overview')" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors" id="nav-overview">
+        <svg class="w-4 h-4 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm0 8a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zm12 0a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
+        Vue d'ensemble
+      </a>
+      <a onclick="showSection('upload')" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors" id="nav-upload">
+        <svg class="w-4 h-4 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+        Uploader
+      </a>
+      <a onclick="showSection('urls')" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors" id="nav-urls">
+        <svg class="w-4 h-4 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+        Indexer une URL
+      </a>
+      <a onclick="showSection('documents')" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors" id="nav-documents">
+        <svg class="w-4 h-4 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        Documents
+      </a>
+      <a onclick="showSection('jobs')" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors" id="nav-jobs">
+        <svg class="w-4 h-4 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        File d'attente
+        <span id="badgeJobs" class="ml-auto hidden text-[10px] font-semibold bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full"></span>
+      </a>
+    </nav>
+
+    <!-- Clé API -->
+    <div class="px-3 py-4 border-t border-slate-100">
+      <p class="text-[10px] font-medium text-slate-400 uppercase tracking-wide mb-1.5 px-1">Clé admin</p>
+      <div class="relative">
+        <input id="apiKey" type="password" placeholder="ADMIN_API_KEY"
+               class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand transition"
+               oninput="onKeyChange()" />
+        <div id="keyStatus" class="absolute right-2.5 top-2.5 w-2 h-2 rounded-full bg-slate-300"></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="ml-56 flex-1 flex flex-col">
+
+    <!-- Topbar -->
+    <header class="bg-white border-b border-slate-100 px-8 py-4 flex items-center justify-between sticky top-0 z-10">
+      <div>
+        <h1 id="pageTitle" class="text-base font-semibold text-slate-800">Vue d'ensemble</h1>
+        <p id="pageDesc" class="text-xs text-slate-400 mt-0.5">Statistiques et état du système</p>
+      </div>
+      <div class="flex items-center gap-2 text-xs text-slate-400">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse inline-block"></span>
+        Actualisation auto · 4s
+      </div>
+    </header>
+
+    <div class="flex-1 px-8 py-8">
+
+      <!-- ══ OVERVIEW ═══════════════════════════════════════════════════════ -->
+      <section id="sec-overview" class="section fade">
+        <div class="grid grid-cols-3 gap-5 mb-8">
+          <div class="bg-white rounded-xl border border-slate-100 p-5">
+            <p class="text-xs font-medium text-slate-400 mb-3">Documents indexés</p>
+            <p class="text-3xl font-bold text-slate-800" id="statDocs">—</p>
+            <p class="text-xs text-slate-400 mt-1">fichiers dans la base</p>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-100 p-5">
+            <p class="text-xs font-medium text-slate-400 mb-3">Chunks vectorisés</p>
+            <p class="text-3xl font-bold text-slate-800" id="statChunks">—</p>
+            <p class="text-xs text-slate-400 mt-1">fragments dans ChromaDB</p>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-100 p-5">
+            <p class="text-xs font-medium text-slate-400 mb-3">Taille de l'index</p>
+            <p class="text-3xl font-bold text-slate-800" id="statSize">—</p>
+            <p class="text-xs text-slate-400 mt-1">sur le disque</p>
+          </div>
+        </div>
+
+        <!-- Recent jobs preview -->
+        <div class="bg-white rounded-xl border border-slate-100">
+          <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+            <span class="text-sm font-medium text-slate-700">Jobs récents</span>
+            <button onclick="showSection('jobs')" class="text-xs text-brand hover:underline">Voir tout</button>
+          </div>
+          <div id="recentJobs" class="divide-y divide-slate-50">
+            <div class="px-5 py-8 text-center text-sm text-slate-400">Entrez votre clé admin</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ UPLOAD ══════════════════════════════════════════════════════════ -->
+      <section id="sec-upload" class="section fade hidden">
+        <div class="max-w-xl">
+          <div id="dropZone"
+               class="border-2 border-dashed border-slate-200 rounded-xl p-12 text-center cursor-pointer hover:border-brand/40 hover:bg-brand/[0.02] transition-all"
+               onclick="document.getElementById('fileInput').click()"
+               ondragover="e=>{e.preventDefault();document.getElementById('dropZone').classList.add('drop-active')}"
+               ondragleave="document.getElementById('dropZone').classList.remove('drop-active')"
+               ondrop="onDrop(event)">
+            <div class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+            </div>
+            <p class="text-sm font-medium text-slate-600">Glisser un fichier ici</p>
+            <p class="text-xs text-slate-400 mt-1">ou cliquer pour parcourir</p>
+            <div class="mt-4 flex flex-wrap justify-center gap-1.5">
+              <span class="text-[10px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded">PDF</span>
+              <span class="text-[10px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded">DOCX</span>
+              <span class="text-[10px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded">DOC</span>
+              <span class="text-[10px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded">XLSX</span>
+              <span class="text-[10px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded">XLS</span>
+              <span class="text-[10px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded">XLSM</span>
+            </div>
+          </div>
+          <input id="fileInput" type="file" class="hidden" accept=".pdf,.docx,.doc,.xlsx,.xls,.xlsm" onchange="onFileSelected(event)" />
+
+          <!-- File selected -->
+          <div id="filePreview" class="hidden mt-4 bg-white border border-slate-100 rounded-xl p-4 flex items-center gap-3">
+            <div class="w-9 h-9 bg-blue-50 rounded-lg flex items-center justify-center shrink-0">
+              <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p id="fileName" class="text-sm font-medium text-slate-700 truncate"></p>
+              <p id="fileSize" class="text-xs text-slate-400 mt-0.5"></p>
+            </div>
+            <button onclick="clearFile()" class="text-slate-300 hover:text-slate-500 transition shrink-0">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+
+          <!-- Progress -->
+          <div id="uploadProgress" class="hidden mt-3">
+            <div class="flex justify-between text-xs text-slate-500 mb-1.5">
+              <span id="uploadStatus">Envoi en cours…</span>
+            </div>
+            <div class="h-1 bg-slate-100 rounded-full overflow-hidden">
+              <div id="uploadBar" class="h-full bg-brand rounded-full transition-all duration-500" style="width:0%"></div>
+            </div>
+          </div>
+
+          <div class="mt-4 flex gap-3">
+            <button id="uploadBtn" onclick="uploadFile()"
+                    class="flex items-center gap-2 bg-brand text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-brand-light transition disabled:opacity-40 disabled:cursor-not-allowed"
+                    disabled>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+              Lancer l'indexation
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ URLS ════════════════════════════════════════════════════════════ -->
+      <section id="sec-urls" class="section fade hidden">
+        <div class="max-w-xl space-y-4">
+          <div class="bg-white rounded-xl border border-slate-100 p-6">
+            <label class="block text-sm font-medium text-slate-700 mb-3">URL à indexer</label>
+            <div class="flex gap-2">
+              <input id="urlInput" type="url" placeholder="https://agents-chu-angers.fr/…"
+                     class="flex-1 text-sm border border-slate-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand transition placeholder:text-slate-300"
+                     onkeydown="if(event.key==='Enter')addUrl()" />
+              <button onclick="addUrl()"
+                      class="bg-brand text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-brand-light transition whitespace-nowrap">
+                Indexer
+              </button>
+            </div>
+            <p class="text-xs text-slate-400 mt-2.5">La page sera scrapée et ses chunks ajoutés à ChromaDB automatiquement.</p>
+          </div>
+
+          <!-- Queue rapide URLs -->
+          <div id="urlQueue" class="space-y-2"></div>
+        </div>
+      </section>
+
+      <!-- ══ DOCUMENTS ═══════════════════════════════════════════════════════ -->
+      <section id="sec-documents" class="section fade hidden">
+        <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
+          <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+            <span class="text-sm font-medium text-slate-700">Documents indexés</span>
+            <button onclick="loadDocuments()" class="text-xs text-slate-500 hover:text-brand transition flex items-center gap-1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              Actualiser
+            </button>
+          </div>
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left text-[11px] font-medium text-slate-400 uppercase tracking-wide border-b border-slate-50">
+                <th class="px-5 py-3">Nom / URL</th>
+                <th class="px-5 py-3 w-20">Type</th>
+                <th class="px-5 py-3 w-24">Chunks</th>
+                <th class="px-5 py-3 w-36">Indexé le</th>
+                <th class="px-5 py-3 w-20"></th>
+              </tr>
+            </thead>
+            <tbody id="docsBody" class="divide-y divide-slate-50">
+              <tr><td colspan="5" class="px-5 py-10 text-center text-sm text-slate-400">Entrez votre clé admin</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ══ JOBS ════════════════════════════════════════════════════════════ -->
+      <section id="sec-jobs" class="section fade hidden">
+        <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
+          <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+            <span class="text-sm font-medium text-slate-700">File d'attente</span>
+            <button onclick="loadJobs()" class="text-xs text-slate-500 hover:text-brand transition flex items-center gap-1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              Actualiser
+            </button>
+          </div>
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left text-[11px] font-medium text-slate-400 uppercase tracking-wide border-b border-slate-50">
+                <th class="px-5 py-3">Source</th>
+                <th class="px-5 py-3 w-20">Type</th>
+                <th class="px-5 py-3 w-32">Statut</th>
+                <th class="px-5 py-3 w-24">Chunks</th>
+                <th class="px-5 py-3 w-36">Date</th>
+              </tr>
+            </thead>
+            <tbody id="jobsBody" class="divide-y divide-slate-50">
+              <tr><td colspan="5" class="px-5 py-10 text-center text-sm text-slate-400">Entrez votre clé admin</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="fixed bottom-6 right-6 z-50 opacity-0 pointer-events-none transition-all duration-200 translate-y-1">
+  <div id="toastMsg" class="flex items-center gap-2.5 bg-slate-900 text-white text-xs font-medium px-4 py-3 rounded-xl shadow-xl max-w-xs"></div>
+</div>
+
+<script>
+const BASE = '/api/admin';
+let selectedFile = null;
+let pollTimer = null;
+let currentSection = 'overview';
+
+// ── Navigation ───────────────────────────────────────────────────────────────
+
+const SECTIONS = {
+  overview:  { title: "Vue d'ensemble",  desc: "Statistiques et état du système" },
+  upload:    { title: "Uploader",         desc: "Ajouter un document à l'index" },
+  urls:      { title: "Indexer une URL",  desc: "Scraper et indexer une page web" },
+  documents: { title: "Documents",        desc: "Liste des documents indexés" },
+  jobs:      { title: "File d'attente",   desc: "Historique des jobs d'ingestion" },
+};
+
+function showSection(id) {
+  currentSection = id;
+  document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+  document.getElementById('sec-' + id).classList.remove('hidden');
+  document.querySelectorAll('.nav-link').forEach(l => {
+    l.classList.remove('bg-brand/10', 'text-brand', 'font-medium');
+    l.classList.add('text-slate-600');
+  });
+  const nav = document.getElementById('nav-' + id);
+  if (nav) {
+    nav.classList.add('bg-brand/10', 'text-brand', 'font-medium');
+    nav.classList.remove('text-slate-600');
+  }
+  document.getElementById('pageTitle').textContent = SECTIONS[id].title;
+  document.getElementById('pageDesc').textContent  = SECTIONS[id].desc;
+
+  if (id === 'documents') loadDocuments();
+  if (id === 'jobs')      loadJobs();
+  if (id === 'overview')  { loadStats(); loadJobs(); }
+}
+
+// ── Auth ─────────────────────────────────────────────────────────────────────
+
+function onKeyChange() {
+  localStorage.setItem('chubot_admin_key', document.getElementById('apiKey').value);
+  const dot = document.getElementById('keyStatus');
+  if (getKey()) { dot.className = 'absolute right-2.5 top-2.5 w-2 h-2 rounded-full bg-emerald-400'; startPolling(); }
+  else           { dot.className = 'absolute right-2.5 top-2.5 w-2 h-2 rounded-full bg-slate-300'; }
+}
+
+function getKey() { return document.getElementById('apiKey').value.trim(); }
+function hdr(json=true) {
+  const h = { 'X-Admin-Key': getKey() };
+  if (json) h['Content-Type'] = 'application/json';
+  return h;
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  showSection('overview');
+  const saved = localStorage.getItem('chubot_admin_key');
+  if (saved) { document.getElementById('apiKey').value = saved; onKeyChange(); }
+});
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+
+function toast(msg, type = 'ok') {
+  const icons = {
+    ok:   '<svg class="w-3.5 h-3.5 shrink-0 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>',
+    err:  '<svg class="w-3.5 h-3.5 shrink-0 text-red-400"     fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>',
+    warn: '<svg class="w-3.5 h-3.5 shrink-0 text-amber-400"   fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>',
+  };
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').innerHTML = (icons[type]||'') + `<span>${msg}</span>`;
+  t.style.opacity = '1'; t.style.transform = 'translateY(0)'; t.classList.remove('pointer-events-none');
+  setTimeout(() => { t.style.opacity='0'; t.style.transform='translateY(4px)'; t.classList.add('pointer-events-none'); }, 3200);
+}
+
+// ── Stats ─────────────────────────────────────────────────────────────────────
+
+async function loadStats() {
+  if (!getKey()) return;
+  try {
+    const r = await fetch(`${BASE}/index/stats`, { headers: hdr(false) });
+    if (!r.ok) return;
+    const d = await r.json();
+    document.getElementById('statDocs').textContent   = d.total_documents;
+    document.getElementById('statChunks').textContent = d.total_chunks;
+    document.getElementById('statSize').textContent   = d.index_size_mb + ' Mo';
+  } catch {}
+}
+
+// ── Fichier ───────────────────────────────────────────────────────────────────
+
+function onDrop(e) {
+  e.preventDefault();
+  document.getElementById('dropZone').classList.remove('drop-active');
+  if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]);
+}
+function onFileSelected(e) { if (e.target.files[0]) setFile(e.target.files[0]); }
+
+function setFile(f) {
+  selectedFile = f;
+  document.getElementById('filePreview').classList.remove('hidden');
+  document.getElementById('fileName').textContent = f.name;
+  document.getElementById('fileSize').textContent = (f.size / 1024 / 1024).toFixed(2) + ' Mo';
+  document.getElementById('uploadBtn').disabled = false;
+}
+
+function clearFile() {
+  selectedFile = null;
+  document.getElementById('filePreview').classList.add('hidden');
+  document.getElementById('fileInput').value = '';
+  document.getElementById('uploadBtn').disabled = true;
+}
+
+async function uploadFile() {
+  if (!selectedFile) return;
+  if (!getKey()) { toast('Entrez la clé admin', 'warn'); return; }
+
+  const prog   = document.getElementById('uploadProgress');
+  const bar    = document.getElementById('uploadBar');
+  const status = document.getElementById('uploadStatus');
+  const btn    = document.getElementById('uploadBtn');
+
+  prog.classList.remove('hidden');
+  bar.style.width = '25%';
+  status.textContent = 'Envoi du fichier…';
+  btn.disabled = true;
+
+  const form = new FormData();
+  form.append('file', selectedFile);
+  try {
+    const r = await fetch(`${BASE}/documents/upload`, { method: 'POST', headers: { 'X-Admin-Key': getKey() }, body: form });
+    const d = await r.json();
+    if (!r.ok) { toast(d.detail || 'Erreur upload', 'err'); bar.style.width='0'; prog.classList.add('hidden'); btn.disabled=false; return; }
+    bar.style.width = '100%';
+    status.textContent = 'Job créé — indexation en arrière-plan';
+    toast(`${selectedFile.name} · job lancé`);
+    setTimeout(() => { prog.classList.add('hidden'); bar.style.width='0'; }, 2500);
+    clearFile();
+    loadJobs();
+    if (currentSection === 'overview') loadJobs();
+  } catch(e) { toast('Erreur réseau', 'err'); btn.disabled=false; }
+}
+
+// ── URL ───────────────────────────────────────────────────────────────────────
+
+async function addUrl() {
+  const url = document.getElementById('urlInput').value.trim();
+  if (!url) return;
+  if (!getKey()) { toast('Entrez la clé admin', 'warn'); return; }
+  try {
+    const r = await fetch(`${BASE}/urls/add`, { method: 'POST', headers: hdr(), body: JSON.stringify({ url }) });
+    const d = await r.json();
+    if (!r.ok) { toast(d.detail || 'Erreur', 'err'); return; }
+    document.getElementById('urlInput').value = '';
+    toast('URL ajoutée · indexation en cours');
+
+    // Carte rapide dans la section URL
+    const q = document.getElementById('urlQueue');
+    const card = document.createElement('div');
+    card.id = 'urlcard-' + d.id;
+    card.className = 'bg-white border border-slate-100 rounded-xl px-4 py-3 flex items-center gap-3 fade';
+    card.innerHTML = `
+      <div class="w-7 h-7 bg-slate-50 rounded-lg flex items-center justify-center shrink-0">
+        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+      </div>
+      <span class="text-xs text-slate-600 truncate flex-1">${url}</span>
+      <span id="qs-${d.id}" class="status-badge pending text-[10px] font-medium px-2 py-0.5 rounded-full bg-amber-50 text-amber-600">En attente</span>`;
+    q.prepend(card);
+    pollJobStatus(d.id);
+  } catch(e) { toast('Erreur réseau', 'err'); }
+}
+
+async function pollJobStatus(jobId) {
+  const badge = document.getElementById('qs-' + jobId);
+  if (!badge) return;
+  try {
+    const r = await fetch(`${BASE}/jobs/${jobId}`, { headers: hdr(false) });
+    if (!r.ok) return;
+    const j = await r.json();
+    if (j.status === 'running') {
+      badge.className = 'text-[10px] font-medium px-2 py-0.5 rounded-full bg-blue-50 text-blue-600';
+      badge.textContent = 'En cours…';
+      setTimeout(() => pollJobStatus(jobId), 2000);
+    } else if (j.status === 'done') {
+      badge.className = 'text-[10px] font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600';
+      badge.textContent = `${j.chunks_indexed} chunks`;
+      loadStats();
+    } else if (j.status === 'error') {
+      badge.className = 'text-[10px] font-medium px-2 py-0.5 rounded-full bg-red-50 text-red-500';
+      badge.textContent = 'Erreur';
+    } else {
+      setTimeout(() => pollJobStatus(jobId), 2000);
+    }
+  } catch {}
+}
+
+// ── Jobs ──────────────────────────────────────────────────────────────────────
+
+const ST = {
+  pending: ['bg-amber-50 text-amber-600',  'En attente'],
+  running: ['bg-blue-50 text-blue-600',    'En cours'],
+  done:    ['bg-emerald-50 text-emerald-600','Terminé'],
+  error:   ['bg-red-50 text-red-500',       'Erreur'],
+};
+
+async function loadJobs() {
+  if (!getKey()) return;
+  try {
+    const r = await fetch(`${BASE}/jobs`, { headers: hdr(false) });
+    if (!r.ok) return;
+    const jobs = await r.json();
+
+    const running = jobs.filter(j => j.status === 'pending' || j.status === 'running').length;
+    const badge = document.getElementById('badgeJobs');
+    if (running > 0) { badge.textContent = running; badge.classList.remove('hidden'); }
+    else badge.classList.add('hidden');
+
+    const rowsHtml = j => {
+      const [cls, label] = ST[j.status] || ['bg-slate-100 text-slate-500', j.status];
+      const spin = j.status === 'running' ? '<svg class="w-3 h-3 spin mr-1 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>' : '';
+      return `<tr class="hover:bg-slate-50/50 transition-colors">
+        <td class="px-5 py-3.5">
+          <span class="text-slate-700 text-xs font-medium">${j.source.length > 60 ? j.source.slice(0,60)+'…' : j.source}</span>
+          ${j.error_msg ? `<p class="text-[11px] text-red-400 mt-0.5">${j.error_msg.slice(0,80)}</p>` : ''}
+        </td>
+        <td class="px-5 py-3.5"><span class="text-[11px] font-medium text-slate-400 uppercase">${j.type}</span></td>
+        <td class="px-5 py-3.5"><span class="inline-flex items-center text-[11px] font-medium px-2 py-0.5 rounded-full ${cls}">${spin}${label}</span></td>
+        <td class="px-5 py-3.5 text-xs text-slate-500">${j.chunks_indexed > 0 ? j.chunks_indexed : '—'}</td>
+        <td class="px-5 py-3.5 text-[11px] text-slate-400">${fmtDate(j.created_at)}</td>
+      </tr>`;
+    };
+
+    const empty = '<tr><td colspan="5" class="px-5 py-10 text-center text-sm text-slate-400">Aucun job pour l\'instant</td></tr>';
+
+    document.getElementById('jobsBody').innerHTML = jobs.length ? jobs.map(rowsHtml).join('') : empty;
+
+    // Overview recent
+    const recent = jobs.slice(0,5).map(j => {
+      const [cls, label] = ST[j.status] || [];
+      return `<div class="px-5 py-3 flex items-center gap-3 hover:bg-slate-50/50 transition-colors">
+        <div class="w-6 h-6 rounded-md bg-slate-50 flex items-center justify-center shrink-0 text-[10px] font-bold text-slate-400">${j.type === 'url' ? 'U' : 'F'}</div>
+        <span class="text-xs text-slate-600 flex-1 truncate">${j.source.length>55?j.source.slice(0,55)+'…':j.source}</span>
+        <span class="text-[10px] font-medium px-2 py-0.5 rounded-full ${cls}">${label}</span>
+      </div>`;
+    }).join('');
+    document.getElementById('recentJobs').innerHTML = recent || empty.replace('colspan="5"','');
+  } catch {}
+}
+
+// ── Documents ─────────────────────────────────────────────────────────────────
+
+const TYPE_ICONS = {
+  pdf:  '<div class="w-6 h-6 bg-red-50 rounded flex items-center justify-center text-[9px] font-bold text-red-400">PDF</div>',
+  docx: '<div class="w-6 h-6 bg-blue-50 rounded flex items-center justify-center text-[9px] font-bold text-blue-400">DOC</div>',
+  doc:  '<div class="w-6 h-6 bg-blue-50 rounded flex items-center justify-center text-[9px] font-bold text-blue-400">DOC</div>',
+  xlsx: '<div class="w-6 h-6 bg-green-50 rounded flex items-center justify-center text-[9px] font-bold text-green-500">XLS</div>',
+  xls:  '<div class="w-6 h-6 bg-green-50 rounded flex items-center justify-center text-[9px] font-bold text-green-500">XLS</div>',
+  url:  '<div class="w-6 h-6 bg-purple-50 rounded flex items-center justify-center text-[9px] font-bold text-purple-400">URL</div>',
+};
+
+async function loadDocuments() {
+  if (!getKey()) return;
+  try {
+    const r = await fetch(`${BASE}/documents`, { headers: hdr(false) });
+    if (!r.ok) return;
+    const docs = await r.json();
+    const tbody = document.getElementById('docsBody');
+    if (!docs.length) { tbody.innerHTML = '<tr><td colspan="5" class="px-5 py-10 text-center text-sm text-slate-400">Aucun document indexé</td></tr>'; return; }
+    tbody.innerHTML = docs.map(d => `
+      <tr class="hover:bg-slate-50/50 transition-colors fade">
+        <td class="px-5 py-3.5 flex items-center gap-2.5">
+          ${TYPE_ICONS[d.file_type] || TYPE_ICONS.url}
+          <span class="text-xs text-slate-700 truncate max-w-xs" title="${d.filename}">${d.filename.length>60?d.filename.slice(0,60)+'…':d.filename}</span>
+        </td>
+        <td class="px-5 py-3.5 text-[11px] font-medium text-slate-400 uppercase">${d.file_type}</td>
+        <td class="px-5 py-3.5 text-xs text-slate-600">${d.chunks_indexed}</td>
+        <td class="px-5 py-3.5 text-[11px] text-slate-400">${fmtDate(d.indexed_at)}</td>
+        <td class="px-5 py-3.5">
+          <button onclick="deleteDoc('${d.id}','${d.filename.replace(/'/g,"\\'")}')"
+                  class="text-[11px] text-slate-400 hover:text-red-500 transition font-medium">Supprimer</button>
+        </td>
+      </tr>`).join('');
+  } catch {}
+}
+
+async function deleteDoc(id, name) {
+  if (!confirm(`Supprimer "${name}" de l'index ?`)) return;
+  try {
+    const r = await fetch(`${BASE}/documents/${id}`, { method: 'DELETE', headers: hdr(false) });
+    if (!r.ok) { toast('Erreur suppression', 'err'); return; }
+    toast(`"${name.slice(0,40)}" supprimé`);
+    loadDocuments(); loadStats();
+  } catch { toast('Erreur réseau', 'err'); }
+}
+
+// ── Polling ───────────────────────────────────────────────────────────────────
+
+function startPolling() {
+  clearInterval(pollTimer);
+  loadStats(); loadJobs(); loadDocuments();
+  pollTimer = setInterval(() => {
+    loadJobs();
+    if (currentSection === 'overview') loadStats();
+  }, 4000);
+}
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'2-digit'}) + ' ' +
+         d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+}
+</script>
+</body>
+</html>

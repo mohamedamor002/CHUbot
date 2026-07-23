@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from bot.config.settings import settings
 from bot.api.db.database import create_tables, engine
 import bot.api.db.models  # noqa: F401 — enregistre tous les modèles auprès de Base
-from bot.api.routes import chat, documents, feedback, analytics
+from bot.api.routes import chat, documents, feedback, analytics, admin
 
 
 @asynccontextmanager
@@ -14,7 +14,7 @@ async def lifespan(app: FastAPI):
     await create_tables()
     print(f"[START] {settings.APP_NAME} v{settings.APP_VERSION}")
     print(f"        LLM  : {settings.OLLAMA_MODEL} — {settings.OLLAMA_BASE_URL}")
-    print(f"        DB   : PostgreSQL")
+    print(f"        DB   : SQLite ({settings.DATABASE_URL})")
     print(f"        Index: {settings.VECTOR_STORE_PATH}")
     yield
     await engine.dispose()
@@ -40,6 +40,7 @@ app.include_router(chat.router,      prefix=settings.API_PREFIX)
 app.include_router(documents.router, prefix=settings.API_PREFIX)
 app.include_router(feedback.router,  prefix=settings.API_PREFIX)
 app.include_router(analytics.router, prefix=settings.API_PREFIX)
+app.include_router(admin.router,     prefix="/api")
 
 
 @app.get("/health")

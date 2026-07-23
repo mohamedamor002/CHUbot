@@ -1,37 +1,36 @@
-export default function Avatar({ onClick }) {
+import logo from '../assets/chulogo.png'
+
+export default function Avatar({ onClick, connecting }) {
   return (
-    // Zone draggable (le pourtour du cercle)
     <div
       data-tauri-drag-region
       className="w-20 h-20 flex items-center justify-center cursor-move select-none"
     >
-      {/* Bouton central — click only, pas de drag */}
       <button
         onClick={onClick}
-        className="
+        disabled={connecting}
+        className={`
           w-16 h-16 rounded-full
-          bg-gradient-to-br from-blue-600 to-blue-800
-          shadow-2xl hover:shadow-blue-500/50
-          flex flex-col items-center justify-center gap-0.5
-          hover:scale-110 active:scale-95
+          bg-white
+          shadow-2xl
+          flex items-center justify-center
           transition-all duration-200
-          border-2 border-white/20
-          cursor-pointer
-        "
-        title="Ouvrir CHUbot"
+          border border-slate-200
+          overflow-hidden
+          ${connecting
+            ? 'opacity-60 cursor-wait'
+            : 'hover:shadow-blue-500/40 hover:scale-110 active:scale-95 cursor-pointer'
+          }
+        `}
+        title={connecting ? 'Démarrage du serveur...' : 'Ouvrir CHUbot'}
       >
-        {/* Croix médicale */}
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
-          <rect x="10" y="3" width="4" height="18" rx="1" />
-          <rect x="3" y="10" width="18" height="4" rx="1" />
-        </svg>
-        <span className="text-white text-[9px] font-bold tracking-widest leading-none">
-          CHU
-        </span>
+        <img src={logo} alt="CHUbot" className="w-full h-full object-contain p-1" />
       </button>
 
-      {/* Anneau de pulsation */}
-      <span className="absolute w-16 h-16 rounded-full border-2 border-blue-400/40 animate-ping pointer-events-none" />
+      {connecting
+        ? <span className="absolute w-16 h-16 rounded-full border-2 border-orange-400/60 animate-spin pointer-events-none" style={{ borderTopColor: 'transparent' }} />
+        : <span className="absolute w-16 h-16 rounded-full border-2 border-blue-400/30 animate-ping pointer-events-none" />
+      }
     </div>
   )
 }

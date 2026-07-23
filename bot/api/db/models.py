@@ -13,9 +13,8 @@ import uuid
 from datetime import datetime, timezone
 
 from sqlalchemy import (
-    Boolean, DateTime, ForeignKey, Integer, String, Text, UniqueConstraint,
+    Boolean, DateTime, ForeignKey, Integer, String, Text, UniqueConstraint, Uuid,
 )
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from bot.api.db.database import Base
@@ -30,7 +29,7 @@ def _now() -> datetime:
 class User(Base):
     __tablename__ = "users"
 
-    id:             Mapped[uuid.UUID]  = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id:             Mapped[uuid.UUID]  = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
     username:       Mapped[str]        = mapped_column(String(50),  unique=True, index=True, nullable=False)
     email:          Mapped[str]        = mapped_column(String(255), unique=True, index=True, nullable=False)
     hashed_password:Mapped[str]        = mapped_column(String(255), nullable=False)
@@ -50,8 +49,8 @@ class User(Base):
 class ConversationSession(Base):
     __tablename__ = "conversation_sessions"
 
-    id:         Mapped[uuid.UUID]  = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id:    Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), index=True)
+    id:         Mapped[uuid.UUID]  = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id:    Mapped[uuid.UUID | None] = mapped_column(Uuid(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), index=True)
     title:      Mapped[str | None] = mapped_column(String(255))
     created_at: Mapped[datetime]   = mapped_column(DateTime(timezone=True), default=_now)
     updated_at: Mapped[datetime]   = mapped_column(DateTime(timezone=True), default=_now, onupdate=_now)
@@ -69,8 +68,8 @@ class ConversationSession(Base):
 class Message(Base):
     __tablename__ = "messages"
 
-    id:         Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    session_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("conversation_sessions.id", ondelete="CASCADE"), index=True, nullable=False)
+    id:         Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    session_id: Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), ForeignKey("conversation_sessions.id", ondelete="CASCADE"), index=True, nullable=False)
     role:       Mapped[str]       = mapped_column(String(20), nullable=False)  # "human" | "assistant"
     content:    Mapped[str]       = mapped_column(Text, nullable=False)
     created_at: Mapped[datetime]  = mapped_column(DateTime(timezone=True), default=_now)
@@ -85,8 +84,8 @@ class Message(Base):
 class Feedback(Base):
     __tablename__ = "feedback"
 
-    id:         Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    message_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("messages.id", ondelete="CASCADE"), index=True, nullable=False)
+    id:         Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    message_id: Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), ForeignKey("messages.id", ondelete="CASCADE"), index=True, nullable=False)
     is_helpful: Mapped[bool]      = mapped_column(Boolean, nullable=False)
     rating:     Mapped[int | None]= mapped_column(Integer)  # 1-5
     created_at: Mapped[datetime]  = mapped_column(DateTime(timezone=True), default=_now)
@@ -100,8 +99,8 @@ class MessageMetrics(Base):
     __tablename__ = "message_metrics"
     __table_args__ = (UniqueConstraint("message_id"),)
 
-    id:              Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    message_id:      Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("messages.id", ondelete="CASCADE"), nullable=False)
+    id:              Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    message_id:      Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), ForeignKey("messages.id", ondelete="CASCADE"), nullable=False)
     response_time_ms:Mapped[int | None]= mapped_column(Integer)
     is_covered:      Mapped[bool]      = mapped_column(Boolean, default=True)   # docs trouvés
     has_escalation:  Mapped[bool]      = mapped_column(Boolean, default=False)  # renvoi service
@@ -115,8 +114,24 @@ class MessageMetrics(Base):
 class IndexedDocument(Base):
     __tablename__ = "indexed_documents"
 
-    id:             Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id:             Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
     filename:       Mapped[str]       = mapped_column(String(255), nullable=False)
     file_type:      Mapped[str]       = mapped_column(String(10),  nullable=False)
     chunks_indexed: Mapped[int]       = mapped_column(Integer, nullable=False)
     indexed_at:     Mapped[datetime]  = mapped_column(DateTime(timezone=True), default=_now)
+
+
+# ── Jobs d'ingestion admin ────────────────────────────────────────────────────
+
+class IngestionJob(Base):
+    """Trace chaque tâche d'ingestion lancée depuis l'interface admin."""
+    __tablename__ = "ingestion_jobs"
+
+    id:             Mapped[uuid.UUID]      = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    type:           Mapped[str]            = mapped_column(String(10),  nullable=False)  # "file" | "url"
+    source:         Mapped[str]            = mapped_column(String(512), nullable=False)  # nom fichier ou URL
+    status:         Mapped[str]            = mapped_column(String(20),  nullable=False, default="pending")
+    chunks_indexed: Mapped[int]            = mapped_column(Integer, default=0)
+    error_msg:      Mapped[str | None]     = mapped_column(Text)
+    created_at:     Mapped[datetime]       = mapped_column(DateTime(timezone=True), default=_now)
+    finished_at:    Mapped[datetime | None]= mapped_column(DateTime(timezone=True))

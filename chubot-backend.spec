@@ -37,7 +37,7 @@ all_hiddens = (
     hiddens_uvi + hiddens_fast + hiddens_star +
     hiddens_lc + hiddens_lcc + hiddens_lccom + hiddens_lcol + hiddens_lcch +
     hiddens_chr + hiddens_pyd + hiddens_pyds +
-    collect_submodules('asyncpg') +
+    collect_submodules('aiosqlite') +
     collect_submodules('sqlalchemy') +
     collect_submodules('flashrank') +
     collect_submodules('rank_bm25') +
@@ -57,6 +57,8 @@ all_hiddens = (
         'uvicorn.workers',
         'h11', 'h11._connection', 'h11._events', 'h11._readers', 'h11._writers',
         'h11._util', 'h11._state', 'h11._headers',
+        'aiosqlite', 'aiosqlite.core',
+        'sqlalchemy.dialects.sqlite', 'sqlalchemy.dialects.sqlite.aiosqlite',
         'langchain_classic', 'langchain_classic.retrievers',
         'langchain_classic.retrievers.ensemble',
         'langchain_text_splitters',
@@ -73,7 +75,10 @@ a = Analysis(
     hiddenimports=all_hiddens,
     hookspath=[],
     runtime_hooks=[],
-    excludes=['playwright', 'pytest', 'notebook', 'matplotlib', 'torch'],
+    # 'magic' (python-magic) segfault au chargement sur cette machine (libmagic cassée/absente) —
+    # non utilisé par le code de l'app (Excel géré via openpyxl dans bot/ingestion/loaders.py),
+    # seulement une dépendance transitive inutilisée de unstructured[xlsx].
+    excludes=['playwright', 'pytest', 'notebook', 'matplotlib', 'torch', 'magic'],
     cipher=block_cipher,
     noarchive=False,
 )

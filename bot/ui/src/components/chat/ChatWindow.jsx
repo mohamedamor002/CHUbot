@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
 import MessageBubble from './MessageBubble.jsx'
 import ChatInput from './ChatInput.jsx'
-import WindowControls from '../WindowControls.jsx'
 import { sendMessageStream, getSession } from '../../api/client.js'
+import logo from '../../assets/chulogo.png'
 
-export default function ChatWindow({ sessionId, onSessionChange, onMinimize }) {
-  const [messages, setMessages] = useState([])
-  const [loading, setLoading] = useState(false)
-  const bottomRef = useRef(null)
-  const skipNextLoad = useRef(false)
-  const winRef = useRef(null)
+export default function ChatWindow({ sessionId, onSessionChange, onMinimize, onNewChat }) {
+  const [messages, setMessages]   = useState([])
+  const [loading, setLoading]     = useState(false)
+  const [pinned, setPinned]       = useState(false)
+  const bottomRef                 = useRef(null)
+  const skipNextLoad              = useRef(false)
+  const winRef                    = useRef(null)
 
-  // Pré-charge la référence Tauri pour le drag programmatique
   useEffect(() => {
     import('@tauri-apps/api/webviewWindow')
       .then(({ WebviewWindow }) => { winRef.current = WebviewWindow.getCurrent() })
@@ -23,16 +23,18 @@ export default function ChatWindow({ sessionId, onSessionChange, onMinimize }) {
     winRef.current?.startDragging().catch(() => {})
   }
 
-  // Charger l'historique uniquement si on reprend une session existante (pas une nouvelle)
+  async function togglePin() {
+    const next = !pinned
+    setPinned(next)
+    winRef.current?.setAlwaysOnTop(next).catch(() => {})
+  }
+
   useEffect(() => {
     if (!sessionId) return
-    if (skipNextLoad.current) {
-      skipNextLoad.current = false
-      return
-    }
-    getSession(sessionId).then((data) => {
-      setMessages(data.messages.map((m) => ({ role: m.role, content: m.content })))
-    }).catch(() => {})
+    if (skipNextLoad.current) { skipNextLoad.current = false; return }
+    getSession(sessionId)
+      .then(data => setMessages(data.messages.map(m => ({ role: m.role, content: m.content }))))
+      .catch(() => {})
   }, [sessionId])
 
   useEffect(() => {
@@ -40,16 +42,15 @@ export default function ChatWindow({ sessionId, onSessionChange, onMinimize }) {
   }, [messages])
 
   async function handleSend(question) {
-    setMessages((prev) => [...prev, { role: 'human', content: question }])
+    setMessages(prev => [...prev, { role: 'human', content: question }])
     setLoading(true)
-    setMessages((prev) => [...prev, { role: 'assistant', content: '', streaming: true, searching: true }])
+    setMessages(prev => [...prev, { role: 'assistant', content: '', streaming: true, searching: true }])
 
     try {
       await sendMessageStream(
-        question,
-        sessionId,
+        question, sessionId,
         (chunk) => {
-          setMessages((prev) => {
+          setMessages(prev => {
             const updated = [...prev]
             const last = updated[updated.length - 1]
             updated[updated.length - 1] = { ...last, content: last.content + chunk, searching: false }
@@ -58,10 +59,10 @@ export default function ChatWindow({ sessionId, onSessionChange, onMinimize }) {
         },
         (newSessionId, sources, messageId) => {
           if (newSessionId && !sessionId) {
-            skipNextLoad.current = true  // session créée maintenant — ne pas recharger
+            skipNextLoad.current = true
             onSessionChange(newSessionId)
           }
-          setMessages((prev) => {
+          setMessages(prev => {
             const updated = [...prev]
             updated[updated.length - 1] = {
               ...updated[updated.length - 1],
@@ -73,8 +74,8 @@ export default function ChatWindow({ sessionId, onSessionChange, onMinimize }) {
           })
         }
       )
-    } catch (err) {
-      setMessages((prev) => {
+    } catch {
+      setMessages(prev => {
         const updated = [...prev]
         updated[updated.length - 1] = {
           role: 'assistant',
@@ -91,50 +92,86 @@ export default function ChatWindow({ sessionId, onSessionChange, onMinimize }) {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header — drag programmatique via startDragging() */}
+
+      {/* ── Accent CHU ── */}
+      <div className="h-0.5 bg-blue-600 flex-shrink-0 rounded-t-xl" />
+
+      {/* ── Top bar ── */}
       <div
         onMouseDown={handleDragStart}
-        className="pl-4 pr-4 pt-7 pb-3 border-b border-slate-200 bg-white flex items-center justify-between flex-shrink-0 select-none cursor-grab active:cursor-grabbing"
+        className="flex items-center justify-between px-3 pt-2.5 pb-2 select-none cursor-grab active:cursor-grabbing flex-shrink-0"
       >
-        <div className="flex-1 min-w-0">
-          <h1 className="text-sm font-semibold text-slate-800 leading-tight truncate">Assistant RH — CHUbot</h1>
-          <p className="text-xs text-slate-400">CHU d'Angers · DRH</p>
+        {/* Left: system controls */}
+        <div className="flex items-center gap-1">
+          <button
+            onMouseDown={e => e.stopPropagation()}
+            onClick={() => onMinimize?.()}
+            title="Réduire en avatar"
+            className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors text-lg leading-none font-light"
+          >
+            −
+          </button>
+          <button
+            onMouseDown={e => e.stopPropagation()}
+            onClick={togglePin}
+            title={pinned ? 'Désépingler' : 'Épingler'}
+            className={`w-7 h-7 flex items-center justify-center rounded-lg transition-colors ${
+              pinned ? 'text-blue-500 bg-blue-50' : 'text-slate-400 hover:text-slate-700 hover:bg-slate-100'
+            }`}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill={pinned ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 17v5M5 17h14v-2a2 2 0 00-1.1-1.8l-1.8-.9A2 2 0 0115 10.6V6h1V4H8v2h1v4.6a2 2 0 01-1.1 1.7l-1.8.9A2 2 0 005 15v2z"/>
+            </svg>
+          </button>
         </div>
-        {onMinimize && (
-          <div style={{ flexShrink: 0 }} onMouseDown={(e) => e.stopPropagation()}>
-            <WindowControls onMinimize={onMinimize} />
-          </div>
-        )}
+
+        {/* Right: app actions */}
+        <div className="flex items-center gap-1">
+          <button
+            onMouseDown={e => e.stopPropagation()}
+            onClick={onNewChat}
+            title="Nouvelle conversation"
+            className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </button>
+          <button
+            onMouseDown={e => e.stopPropagation()}
+            onClick={() => winRef.current?.toggleMaximize().catch(() => {})}
+            title="Agrandir"
+            className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+              <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+              <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+              <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+            </svg>
+          </button>
+        </div>
       </div>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4 bg-slate-50">
+      {/* ── Messages ── */}
+      <div className="flex-1 overflow-y-auto px-4 py-2 space-y-4">
         {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full text-center gap-4 py-16">
-            <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center">
-              <svg className="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-              </svg>
-            </div>
-            <div>
-              <p className="font-medium text-slate-700">Comment puis-je vous aider ?</p>
-              <p className="text-sm text-slate_500 mt-1 text-slate-500">
-                Posez une question sur les conges, la paie, le reglement interieur...
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-2 mt-2 w-full max-w-md">
+          <div className="flex flex-col items-center justify-center h-full text-center gap-3 pb-8">
+            <img src={logo} alt="CHUbot" className="w-16 h-16 object-contain opacity-80" />
+            <p className="text-sm text-slate-400">Comment puis-je vous aider ?</p>
+            <div className="flex flex-col gap-1.5 w-64 mt-1">
               {[
-                "Quelle est la politique de conges ?",
-                "Comment fonctionne la paie ?",
-                "Quelles sont les heures de travail ?",
-                "Procedure de demande de formation ?",
-              ].map((suggestion) => (
+                'Politique de congés annuels ?',
+                'Procédure de demande de formation ?',
+                'Comment fonctionne la paie ?',
+              ].map(s => (
                 <button
-                  key={suggestion}
-                  onClick={() => handleSend(suggestion)}
-                  className="text-left px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs text-slate-600 hover:border-blue-300 hover:text-blue-600 transition-colors"
+                  key={s}
+                  onClick={() => handleSend(s)}
+                  className="text-left px-3 py-2 rounded-xl border border-slate-100 text-xs text-slate-500 hover:border-blue-200 hover:text-blue-600 hover:bg-blue-50 transition-colors"
                 >
-                  {suggestion}
+                  {s}
                 </button>
               ))}
             </div>
@@ -155,7 +192,7 @@ export default function ChatWindow({ sessionId, onSessionChange, onMinimize }) {
         <div ref={bottomRef} />
       </div>
 
-      {/* Input */}
+      {/* ── Input ── */}
       <ChatInput onSend={handleSend} disabled={loading} />
     </div>
   )
